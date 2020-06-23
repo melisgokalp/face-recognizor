@@ -52,7 +52,7 @@ def generate_embeddings(model, data_folder, n=None, max_per_class=50):
                 files = os.path.join(person, "*.jpg")
                 imgs = []
                 img_paths = glob.glob(files)[:max_per_class]
-                for img_path in img_paths:
+                for img_path in img_paths[:10000]:
                     img = crop_faces(img_path)
                     if img is not None:
                         imgs.append(img)

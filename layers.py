@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-from torch.legacy.nn.Module import Module
+from torch.legacy.nn import Module
 from torch.legacy.nn.utils import clear
 
 

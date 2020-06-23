@@ -10,6 +10,9 @@ from imutils import face_utils
 from sklearn import svm
 from tqdm import tqdm
 from PIL import Image
+import os
+import datetime
+# from testing import test
 
 from align_faces import extract_faces, align_faces
 from dataset import FaceDataset
@@ -34,7 +37,7 @@ def capture_faces(seconds=20, sampling_duration=0.1, debug=False):
     while time.time() - start_time < seconds:
         ret, frame = video_capture.read()
         if ret:
-            faces = extract_faces(frame)
+            faces = extract_faces(frame) 
             if len(faces) == 1:
                 frames.append(frame)
                 face_locs.append(faces[0])
@@ -80,13 +83,22 @@ def retrain_classifier(clf):
     ds = FaceDataset("data/embeddings", "embeddings/train")
     data, labels, idx_to_name = ds.all()
     clf = clf.fit(data, labels)
+    print(ds.test())
     return clf, idx_to_name
 
 
 def add_face(clf, num_classes):
     name = input("We don't recognize you! Please enter your name:\n").strip().lower()
-    while name in name_to_idx:
-        name = input("We don't recognize you! Please enter your name:\n").strip().lower()
+    increment = 1
+    # while name in name_to_idx:
+    #     print("Face exists, append to embeddings!")
+    #     existing_face = np.load("data/embeddings/{}.npy".format(name))
+    #     with open('myfile.npy', 'ab') as f_handle:
+    #         np.save(f_handle, Matrix)
+    #     np.save("data/embeddings/{}.npy".format(name), embeddings)
+    #     return retrain_classifier(clf), 0
+    if name == "skip":
+        return retrain_classifier(clf), 0
     samples = capture_faces()
     while len(samples) < 50:
         print("We could not capture sufficient samples. Please try again.\n")
@@ -94,10 +106,18 @@ def add_face(clf, num_classes):
     embeddings = preprocess_batch(samples)
     embeddings = openFace(embeddings)
     embeddings = embeddings.detach().numpy()
-
+    print("embeddings shape:", embeddings.shape)
+    if name in name_to_idx:
+        print("Face exists, append to embeddings!")
+        existing_face = np.load("data/embeddings/{}.npy".format(name))
+        # embeddings = existing_face + embeddings
+        print("existing_face shape:", existing_face.shape)
+        embeddings = np.vstack([existing_face, embeddings])
+        increment = 0
+    print("embeddings shape:", embeddings.shape)
     # save name and embeddings
     np.save("data/embeddings/{}.npy".format(name), embeddings)
-    return retrain_classifier(clf)
+    return retrain_classifier(clf), increment
 
 
 def load_model():
@@ -112,16 +132,27 @@ def load_model():
     clf = clf.fit(data, labels)
     return clf, num_classes, ds.ix_to_name
 
-def main(clf, num_classes, idx_to_name):
+def main(clf, num_classes, idx_to_name, testing): 
     # to store previous confidences to determine whether a face exists
     prev_conf = deque(maxlen=CONF_TO_STORE)
-    print("Starting...")
-    while True:
+    f_count = 1
+    names = []
+    if testing:
+        print("Starting the test...")
+        # video_capture = cv2.VideoCapture("test_faces/test_videos/lily_singh1.mov")
+        # frame_array = []
+        test_results = []
+    else:
+        print("Starting video capture...")
+        # video_capture = cv2.VideoCapture(0)
+    while True and f_count<= 200:
         # ret is error code but we don't care about it
         ret, frame = video_capture.read()
         if ret:
             # extract and align faces
+            if testing: f_count += 1
             rects = extract_faces(frame)
+            # print(frame)
             if len(rects) > 0:
 
                 # draw all bounding boxes for faces
@@ -138,7 +169,7 @@ def main(clf, num_classes, idx_to_name):
                 # predict classes for all faces and label them if greater than threshold
                 probs = clf.predict_proba(embeddings)
                 unknown_class_prob = probs[0][-1]
-                print(probs)
+                # print(probs)
                 predictions = np.argmax(probs, axis=1)
                 probs = np.max(probs, axis=1)
                 names = [idx_to_name[idx] for idx in predictions]
@@ -148,38 +179,65 @@ def main(clf, num_classes, idx_to_name):
                 for i in range(len(names)):
                     x, y, w, h = face_utils.rect_to_bb(rects[i])
                     cv2.putText(frame, names[i], (x, y), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 255, 0), 2)
-
+                    if testing: test_results.append(names[i]) 
                 # determine if we need to trigger retraining
                 # we only retrain if there is one person in the frame and they are unrecognized or there are 0 classes
                 if len(faces) == 1:
                     prev_conf.append(unknown_class_prob)
                     if np.mean(prev_conf) > CONF_THRESHOLD and len(prev_conf) == CONF_TO_STORE:
-                        clf, idx_to_name = add_face(clf, num_classes)
+                        (clf, idx_to_name), inc = add_face(clf, num_classes)
                         print(idx_to_name)
-                        num_classes += 1
+                        num_classes += inc
                         prev_conf.clear()
             else:
                 print("No faces detected.")
             cv2.imshow('Camera Feed', frame)
             if cv2.waitKey(1) & 0xFF == ord('r'):
-                clf, idx_to_name = add_face(clf, num_classes)
+                (clf, idx_to_name), inc = add_face(clf, num_classes)
                 print(idx_to_name)
-                num_classes += 1
+                num_classes += inc
                 prev_conf.clear()
         else:
+            if testing: break
             print("ERROR: no frame captured")
+    if testing:  write_log(test_results, names)
+    video_capture.release()
+    cv2.destroyAllWindows()
+
+# def frames_to_vid(frame_array, filename):
+#     print("Video is being saved...")
+#     # print(frame_array[0])
+#     # print(frame_array[0].shape)
+#     out = cv2.VideoWriter(filename,cv2.VideoWriter_fourcc(*'avc1'), 5.0, (frame_array[0].shape[0], frame_array[0].shape[1]), True)
+#     for frame in frame_array:
+#         out.write(frame)
+#     out.release()
+
+def write_log(test_res, videoname):
+    print("Writing test result logs")
+    file1 = open("test_faces/" +testname + "_test_results.txt", "a+")  # append mode
+    file1.write('Test results for ' + testfile + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")   
+    print('\n'.join(test_res))
+    # file1.write('\n'.join(test_res))
+    file1.write("Accuracy: \n")
+    for name in set(test_res):
+        file1.write("   "+name + " {}%\n".format(test_res.count(name)/len(test_res)*100))
+    file1.write("Number of frames: {}\n".format(len(test_res)))
+    file1.write("Note: "+args["note"]+"\n\n") 
+    print("Accuracy is {}%".format(test_res.count(testname)/len(test_res)*100))
+    file1.close()
 
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--gpu", action="store_true", help="run with this flag to run on a GPU")
-    args = vars(parser.parse_args())
+    parser.add_argument("--test", action="store_true", help="run with this flag to test the model") 
+    parser.add_argument('--note', action='store', type=str, help='The text to parse.')
 
+    args = vars(parser.parse_args())
     device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
     print("Using device {}".format(device))
-
-    video_capture = cv2.VideoCapture(0)
     openFace = load_openface(device)
 
     # samples = capture_faces()
@@ -189,14 +247,18 @@ if __name__ == "__main__":
     #
     # # save name and embeddings
     # np.save("data/embeddings/varun.npy", embeddings)
+    if args["test"]:
+        print("Starting the test...")
+        testfile = "test_faces/test_videos/biden_obama.mov"
+        testname = "obama biden"
+        video_capture = cv2.VideoCapture(testfile)
+    else:
+        print("Starting video capture...")
+        video_capture = cv2.VideoCapture(0)
 
     clf, num_classes, idx_to_name = load_model()
     print(idx_to_name)
     # cannot function as a classifier if less than 2 classes
     assert num_classes >= 2
     name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
-    main(clf, num_classes, idx_to_name)
-
-    # When everything is done, release the capture
-    video_capture.release()
-    cv2.destroyAllWindows()
+    main(clf, num_classes, idx_to_name, args["test"])
