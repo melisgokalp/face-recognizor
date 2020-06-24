@@ -1,0 +1,81 @@
+Test results for test_faces/test_videos/obama_5sec.mp4
+obama results:  
+test len is 200
+Accuracy is 98.0% 
+
+Test results for test_faces/test_videos/barack_obama.mp4
+obama results: 
+test len is 192
+Accuracy is 99.47916666666666% 
+
+Test results for test_faces/test_videos/biden_obama.mov
+Accuracy: 
+   joe biden 0.25%
+   unknown_class 94.75%
+   obama 5.0%
+Number of frames: 400
+
+Test results for test_faces/test_videos/obama_test.mov
+Accuracy: 
+   unknown_class 2.0%
+   obama 98.0%
+Number of frames: 200
+
+Test results for test_faces/test_videos/obama_test2.mp4
+Accuracy: 
+   obama 100.0%
+Number of frames: 200
+
+Test results for test_faces/test_videos/obama_test3.mp4
+Accuracy: 
+   obama 99.47916666666666%
+   unknown_class 0.5208333333333333%
+Number of frames: 192
+
+Test results for test_faces/test_videos/obama_minute.mov on 2020-06-18 19:34:35
+Accuracy: 
+   obama 70.5%
+   unknown_class 29.5%
+Number of frames: 200
+Note: retrain with lfw
+
+Test results for test_faces/test_videos/obama_5sec.mp4 on 2020-06-18 19:37:21
+Accuracy: 
+   obama 66.66666666666666%
+   unknown_class 33.33333333333333%
+Number of frames: 90
+Note: retrain with lfw
+
+Test results for test_faces/test_videos/obama_5sec.mp4 on 2020-06-18 19:43:47
+Accuracy: 
+   obama 100.0%
+Number of frames: 150
+Note: retrain with lfw
+
+Test results for test_faces/test_videos/obama_minute.mov on 2020-06-18 20:55:48
+Accuracy: 
+   unknown_class 28.217821782178216%
+   obama 71.78217821782178%
+Number of frames: 202
+Note: retrain with lfw
+
+Test results for test_faces/test_videos/obama_test.mov on 2020-06-18 20:56:44
+Accuracy: 
+   unknown_class 14.893617021276595%
+   obama 85.1063829787234%
+Number of frames: 188
+Note: retrain for test video
+
+Test results for test_faces/test_videos/obama_test2.mp4 on 2020-06-18 20:57:34
+Accuracy: 
+   obama 100.0%
+Number of frames: 200
+Note: test lfw
+
+Test results for test_faces/test_videos/obama_test3.mp4 on 2020-06-18 21:01:38
+Accuracy: 
+   unknown_class 0.5208333333333333%
+   obama 99.47916666666666%
+Number of frames: 192
+Note: retrain for test video
+

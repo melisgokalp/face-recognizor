@@ -1,8 +1,0 @@
-Test results for test_faces/test_videos/lily_michelle_15sec.mov on 2020-06-18 19:09:30
-Accuracy: 
-   lilly singh 25.732899022801302%
-   michelle obama 12.052117263843648%
-   unknown_class 62.21498371335505%
-Number of frames: 307
-Note: retrain with lfw
-

@@ -1,0 +1,26 @@
+Test results for test_faces/test_videos/michelle_obama1.mov
+Accuracy: 
+   michelle obama 100.0%
+
+Number of frames: 200
+
+Test results for test_faces/test_videos/michelle_obama2.mov
+Accuracy: 
+   unknown_class 1.0%
+   michelle obama 99.0%
+
+Number of frames: 200
+
+Test results for test_faces/test_videos/michelle_obama2.mov
+Accuracy: 
+   unknown_class 1.0%
+   michelle obama 99.0%
+Number of frames: 200
+
+Test results for test_faces/test_videos/michelle_obama1.mov on 2020-06-18 19:08:17
+Accuracy: 
+   michelle obama 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: retrain with
+

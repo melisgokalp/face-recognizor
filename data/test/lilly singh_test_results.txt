@@ -1,0 +1,58 @@
+Test results for test_faces/test_videos/lilly_singh0.mov
+lilly singh results:  
+test len is 140
+Accuracy is 78.57142857142857% 
+***Low accuracy on the training video!!
+
+Test results for test_faces/test_videos/lilly_singh1.mov
+unknown_class results:   
+test len is 200
+Accuracy is 1.0% 
+
+Test results for test_faces/test_videos/lilly_singh2_15sec.mov
+lilly singh results:  
+test len is 200
+Accuracy is 18.5% 
+
+Test results for test_faces/test_videos/lilly_singh1.mov
+Accuracy: 
+   unknown_class 47.368421052631575%
+   lilly singh 43.15789473684211% 
+Number of frames: 190
+
+================================================================
+Started retraining if the person is unknown!
+
+Test results for test_faces/test_videos/lilly_singh1.mov
+Accuracy: 
+   unknown_class 0.5%
+   lilly singh 99.5%
+Number of frames: 200
+
+Test results for test_faces/test_videos/lilly_singh2_15sec.mov
+Accuracy: 
+   unknown_class 15.0%
+   lilly singh 85.0%
+Number of frames: 200
+**Chef's kiss accuracy
+
+Test results for test_faces/test_videos/lilly_singh0.mov on 2020-06-18 19:02:12
+Accuracy: 
+   unknown_class 15.0%
+   lilly singh 85.0%
+Number of frames: 200
+Note: retrain with the lfw dataset
+
+Test results for test_faces/test_videos/lilly_singh1.mov on 2020-06-18 19:03:42
+Accuracy: 
+   lilly singh 74.5%
+   unknown_class 25.5%
+Number of frames: 200
+Note: new dataset
+
+Test results for test_faces/test_videos/lilly_singh2_15sec.mov on 2020-06-18 19:05:25
+Accuracy: 
+   lilly singh 77.0%
+   unknown_class 23.0%
+Number of frames: 200
+Note: new dataset2

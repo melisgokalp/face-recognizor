@@ -1,0 +1,106 @@
+
+ Test results for test_faces/test_videos/ramy_youssef1.mov
+ramy youssef results: 
+ramy yousseftest len is 200
+Accuracy is 85.0% 
+**Trained on this video
+
+ Test results for test_faces/test_videos/ramy_youssef3.mov
+ramy youssef results: 
+ramy yousseftest len is 200
+Accuracy is 9.5% 
+**Did poorly in the test video
+
+ Test results for test_faces/test_videos/ramy_youssef2.mov
+ramy youssef results: 
+ramy yousseftest len is 200
+Accuracy is 96.5% 
+**Retrained on this video
+
+================================================================
+Started retraining if the person is unknown!
+
+Test results for test_faces/test_videos/ramy_youssef1.mov
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+
+Test results for test_faces/test_videos/ramy_youssef2.mov
+Accuracy: 
+   ramy youssef 96.5%
+   unknown_class 3.5000000000000004%
+Number of frames: 200
+
+Test results for test_faces/test_videos/ramy_youssef3.mov
+Accuracy: 
+   ramy youssef 64.48598130841121%
+   unknown_class 23.83177570093458%
+   trevor noah 11.682242990654206%.   ----> Misclasssified 11%
+Number of frames: 214
+#Embeddings appended here
+
+Test results for test_faces/test_videos/ramy_youssef3.mov
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+**Perfect accuracy
+
+Test results for test_faces/test_videos/ramy_youssef4.mov
+Accuracy: 
+   unknown_class 15.0%
+   ramy youssef 85.0%
+Number of frames: 200
+**Test video, trained again
+
+Test results for test_faces/test_videos/ramy_youssef4.mov
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+**Perfect accuracy
+
+Test results for test_faces/test_videos/ramy_youssef5.mov
+Accuracy: 
+   ramy youssef 77.5%
+   unknown_class 22.5%
+Number of frames: 200
+**Test video, trained again
+
+Test results for test_faces/test_videos/ramy_youssef5.mov
+Accuracy: 
+   unknown_class 1.0%
+   ramy youssef 99.0%
+Number of frames: 200
+**Perfect accuracy
+
+Too many embeddings?? Around 1000 now Test results for test_faces/test_videos/ramy_youssef1.mov on 2020-06-18 20:59:37
+Accuracy: 
+   ramy youssef 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: train from scratch for lfw
+
+Test results for test_faces/test_videos/ramy_youssef2.mov on 2020-06-18 20:59:54
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: retrain for test video
+
+Test results for test_faces/test_videos/ramy_youssef3.mov on 2020-06-18 21:02:35
+Accuracy: 
+   unknown_class 40.0%
+   ramy youssef 60.0%
+Number of frames: 200
+Note: test lfw
+
+Test results for test_faces/test_videos/ramy_youssef4.mov on 2020-06-18 21:02:56
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: retrain for test video
+
+Test results for test_faces/test_videos/ramy_youssef5.mov on 2020-06-18 21:03:44
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: test lfw
+
