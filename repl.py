@@ -37,7 +37,7 @@ def capture_faces(seconds=20, sampling_duration=0.1, debug=False):
     while time.time() - start_time < seconds:
         ret, frame = video_capture.read()
         if ret:
-            faces = extract_faces(frame) 
+            faces = extract_faces(frame)
             if len(faces) == 1:
                 frames.append(frame)
                 face_locs.append(faces[0])
@@ -80,7 +80,7 @@ def augment_data(image):
     return [np.array(hue1), np.array(hue2), np.array(sat1), np.array(sat2)]
 
 def retrain_classifier(clf):
-    ds = FaceDataset("data/embeddings", "embeddings/train")
+    ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
     data, labels, idx_to_name = ds.all()
     clf = clf.fit(data, labels)
     print(ds.test())
@@ -90,6 +90,7 @@ def retrain_classifier(clf):
 def add_face(clf, num_classes):
     name = input("We don't recognize you! Please enter your name:\n").strip().lower()
     increment = 1
+    live_embeddings_loc = "data/embeddings/live"
     # while name in name_to_idx:
     #     print("Face exists, append to embeddings!")
     #     existing_face = np.load("data/embeddings/{}.npy".format(name))
@@ -109,14 +110,14 @@ def add_face(clf, num_classes):
     print("embeddings shape:", embeddings.shape)
     if name in name_to_idx:
         print("Face exists, append to embeddings!")
-        existing_face = np.load("data/embeddings/{}.npy".format(name))
+        existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
         # embeddings = existing_face + embeddings
         print("existing_face shape:", existing_face.shape)
         embeddings = np.vstack([existing_face, embeddings])
         increment = 0
     print("embeddings shape:", embeddings.shape)
     # save name and embeddings
-    np.save("data/embeddings/{}.npy".format(name), embeddings)
+    np.save(live_embeddings_loc + "/{}.npy", embeddings)
     return retrain_classifier(clf), increment
 
 
@@ -126,7 +127,7 @@ def load_model():
     #network = BinaryFaceNetwork(device)
     #network.load_state_dict(torch.load("data/binary_face_classifier.pt", map_location=device))
     #clf = BinaryFaceClassifier(network, 0.5)
-    ds = FaceDataset("data/embeddings", "embeddings/train")
+    ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
     data, labels, idx_to_name = ds.all()
     num_classes = len(np.unique(labels))
     clf = clf.fit(data, labels)
@@ -215,7 +216,7 @@ def main(clf, num_classes, idx_to_name, testing):
 
 def write_log(test_res, videoname):
     print("Writing test result logs")
-    file1 = open("test_faces/" +testname + "_test_results.txt", "a+")  # append mode
+    file1 = open("data/test/" +testname + "_test_results.txt", "a+")  # append mode
     file1.write('Test results for ' + testfile + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")   
     print('\n'.join(test_res))
     # file1.write('\n'.join(test_res))
@@ -249,8 +250,8 @@ if __name__ == "__main__":
     # np.save("data/embeddings/varun.npy", embeddings)
     if args["test"]:
         print("Starting the test...")
-        testfile = "test_faces/test_videos/biden_obama.mov"
-        testname = "obama biden"
+        testfile = "data/test/test_videos/andrew_yang2.m4v"
+        testname = "andrew yang"
         video_capture = cv2.VideoCapture(testfile)
     else:
         print("Starting video capture...")
