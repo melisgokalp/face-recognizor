@@ -1,5 +1,11 @@
-# face-detecterz
+# face-recognizor
+This project is forked from vrnmthr/face-detecterz and aims to improve face recognition by increasing accuracy and debiasing the model. While research is still being done, changes are documented.
 
-To run the project, we recommend creating a virtual environment and installing all libraries in the requirements.txt file. You can do this easily with pip by running `pip install -r requirements.txt`. Next, run `python3 repl.py` to be recognized! Note that the system will not prompt you to enter your name for retraining unless there is only one face in the video stream and it has been unknown for 30 frames, so retraining will not occur if two or more people are in the scene at the same time. When the system starts to capture new images for retraining, the video feed will appear to temporarily freeze, but it is recording you live. So long as the "sample taken" statements are being printed out, samples are being taken to add you to the dataset. If you tilt your head back and forth slightly, this will help with variety of images for retraining.
+## To install
+Run `pip install -r requirements.txt`
 
-The emeddings from the CASIA face dataset are located in embeddings/known, and the faces added to the database during the process are stored in data/embeddings.
+## To Run
+For live camera feed and recognition, run `python3 repl.py` and enter your name when prompted and the picture samples will be taken.
+ `python3 repl.py --test` to train and test on preset videos.
+
+The embeddings are from the LFW dataset, which is located in embeddings/lfw
