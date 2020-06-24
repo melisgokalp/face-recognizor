@@ -1,0 +1,19 @@
+Test results for test_faces/test_videos/joe_biden.mov
+Accuracy: 
+   joe biden 78.0%
+   unknown_class 22.0%
+Number of frames: 200
+
+Test results for test_faces/test_videos/joe_biden.mov on 2020-06-18 19:28:08
+Accuracy: 
+   unknown_class 17.5%
+   joe biden 82.5%
+Number of frames: 200
+Note: retrain with lfw
+
+Test results for test_faces/test_videos/joe_biden1.mov on 2020-06-18 19:28:38
+Accuracy: 
+   joe biden 100.0%
+Number of frames: 200
+Note: retrain 2 with less classes
+
