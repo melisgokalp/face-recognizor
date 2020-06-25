@@ -13,6 +13,8 @@ from PIL import Image
 import os
 import datetime
 # from testing import test
+import glob
+import random
 
 from align_faces import extract_faces, align_faces
 from dataset import FaceDataset
@@ -110,16 +112,33 @@ def add_face(clf, num_classes):
     print("embeddings shape:", embeddings.shape)
     if name in name_to_idx:
         print("Face exists, append to embeddings!")
-        existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
-        # embeddings = existing_face + embeddings
-        print("existing_face shape:", existing_face.shape)
-        embeddings = np.vstack([existing_face, embeddings])
+        embeddings = update_embedding(live_embeddings_loc, embeddings, name)
+        # existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
+        # # embeddings = existing_face + embeddings
+        # print("existing_face shape:", existing_face.shape)
+        # embeddings = np.vstack([existing_face, embeddings])
+
         increment = 0
     print("embeddings shape:", embeddings.shape)
     # save name and embeddings
-    np.save(live_embeddings_loc + "/{}.npy", embeddings)
+    np.save(live_embeddings_loc + "/{}.npy".format(name), embeddings)
     return retrain_classifier(clf), increment
 
+def update_embedding(live_embeddings_loc, embeddings, name):
+    existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name)) 
+    print("existing_face shape:", existing_face.shape)
+    # size is like samplesx128 so change the sample size
+    min_len = int(min(len(existing_face), len(embeddings))/2)
+    print("existing shape: ", existing_face.shape)
+    print("embeddings shape: ", existing_face.shape)
+    existing_face = existing_face[np.random.choice(min_len, size=2, replace=False)]
+    embeddings = embeddings[np.random.choice(min_len, size=2, replace=False)]
+
+    print("existing shape after: ", existing_face.shape)
+    print("embeddings shape after: ", existing_face.shape)
+    embeddings = np.vstack([existing_face, embeddings])
+    increment = 0
+    return embeddings
 
 def load_model():
     # TODO: in the future we should look at model persistence to disk
@@ -133,7 +152,7 @@ def load_model():
     clf = clf.fit(data, labels)
     return clf, num_classes, ds.ix_to_name
 
-def main(clf, num_classes, idx_to_name, testing): 
+def recognize(clf, num_classes, idx_to_name, testing): 
     # to store previous confidences to determine whether a face exists
     prev_conf = deque(maxlen=CONF_TO_STORE)
     f_count = 1
@@ -216,15 +235,16 @@ def main(clf, num_classes, idx_to_name, testing):
 
 def write_log(test_res, videoname):
     print("Writing test result logs")
-    file1 = open("data/test/" +testname + "_test_results.txt", "a+")  # append mode
-    file1.write('Test results for ' + testfile + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")   
+    file1 = open("data/test/" + testname + " test results.txt", "a+")  # append mode
+    file1.write('Test results for ' + file + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")   
     print('\n'.join(test_res))
     # file1.write('\n'.join(test_res))
     file1.write("Accuracy: \n")
     for name in set(test_res):
         file1.write("   "+name + " {}%\n".format(test_res.count(name)/len(test_res)*100))
     file1.write("Number of frames: {}\n".format(len(test_res)))
-    file1.write("Note: "+args["note"]+"\n\n") 
+    if type(args["note"]) == str:
+        file1.write("Note: "+args["note"]+"\n\n") 
     print("Accuracy is {}%".format(test_res.count(testname)/len(test_res)*100))
     file1.close()
 
@@ -248,18 +268,39 @@ if __name__ == "__main__":
     #
     # # save name and embeddings
     # np.save("data/embeddings/varun.npy", embeddings)
-    if args["test"]:
-        print("Starting the test...")
-        testfile = "data/test/test_videos/andrew_yang2.m4v"
-        testname = "andrew yang"
-        video_capture = cv2.VideoCapture(testfile)
-    else:
-        print("Starting video capture...")
-        video_capture = cv2.VideoCapture(0)
+
+    # KEEP
+    # if args["test"]:
+    #     print("Starting the test...")
+    #     testfile = "data/test/test_videos/ramy_youssef/ramy_youssef1.mov"
+    #     testname = "ramy youssef"
+    #     video_capture = cv2.VideoCapture(testfile)
+    # else:
+    #     print("Starting video capture...")
+    #     video_capture = cv2.VideoCapture(0)
 
     clf, num_classes, idx_to_name = load_model()
     print(idx_to_name)
     # cannot function as a classifier if less than 2 classes
     assert num_classes >= 2
-    name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
-    main(clf, num_classes, idx_to_name, args["test"])
+
+    if args["test"]:
+        files = glob.glob("data/test/test_videos/*/*")
+        random.shuffle(files)
+        for file in files:
+            video_capture = cv2.VideoCapture(file)
+            testname = file.split("/")[-2].replace("_", " ")
+            print("Testing " + testname + " for file " + file)
+            name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
+            recognize(clf, num_classes, idx_to_name, args["test"])
+            clf, num_classes, idx_to_name = load_model()
+    else:
+        print("Starting video capture...")
+        video_capture = cv2.VideoCapture(0)
+        recognize(clf, num_classes, idx_to_name, args["test"])
+    # clf, num_classes, idx_to_name = load_model()
+    # print(idx_to_name)
+    # # cannot function as a classifier if less than 2 classes
+    # assert num_classes >= 2
+    # name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
+    # recognize(clf, num_classes, idx_to_name, args["test"])

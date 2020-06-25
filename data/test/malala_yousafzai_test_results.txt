@@ -1,0 +1,9 @@
+Test results for data/test/test_videos/malala_yousafzai/malala_yousafzai2.mov on 2020-06-25 19:35:08
+Accuracy: 
+   malala yousafzai 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Test results for data/test/test_videos/malala_yousafzai/malala_yousafzai1.mov on 2020-06-25 19:35:36
+Accuracy: 
+   bernie sanders 100.0%
+Number of frames: 200
