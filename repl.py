@@ -15,6 +15,7 @@ import datetime
 # from testing import test
 import glob
 import random
+import sys
 
 from align_faces import extract_faces, align_faces
 from dataset import FaceDataset
@@ -195,7 +196,7 @@ def recognize(clf, num_classes, idx_to_name, testing):
                 names = [idx_to_name[idx] for idx in predictions]
                 # replace all faces below confidence w unknown
                 names = [names[i] if probs[i] > CONF_THRESHOLD else "unknown_class" for i in range(len(probs))]
-                print("Hi {}!".format(names))
+                # print("Hi {}!".format(names))
                 for i in range(len(names)):
                     x, y, w, h = face_utils.rect_to_bb(rects[i])
                     cv2.putText(frame, names[i], (x, y), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 255, 0), 2)
@@ -287,13 +288,16 @@ if __name__ == "__main__":
     if args["test"]:
         files = glob.glob("data/test/test_videos/*/*")
         random.shuffle(files)
-        for file in files:
+        for i in tqdm(range(len(files)), total=len(files)):
+        # for file in files:
+            file = files[i]
             video_capture = cv2.VideoCapture(file)
             testname = file.split("/")[-2].replace("_", " ")
             print("Testing " + testname + " for file " + file)
             name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
             recognize(clf, num_classes, idx_to_name, args["test"])
             clf, num_classes, idx_to_name = load_model()
+        print("DONE TESTING!!")
     else:
         print("Starting video capture...")
         video_capture = cv2.VideoCapture(0)

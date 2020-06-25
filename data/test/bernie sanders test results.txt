@@ -1,0 +1,5 @@
+Test results for data/test/test_videos/bernie_sanders/bernie_sanders.mov on 2020-06-25 19:41:10
+Accuracy: 
+   bernie sanders 99.5%
+   unknown_class 0.5%
+Number of frames: 200
