@@ -1,0 +1,5 @@
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef3.mov on 2020-06-25 19:48:52
+Accuracy: 
+   unknown_class 35.361216730038024%
+   ramy youssef 64.63878326996198%
+Number of frames: 263

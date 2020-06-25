@@ -1,0 +1,12 @@
+Test results for data/test/test_videos/multiple_people/biden_obama.mov on 2020-06-25 19:41:44
+Accuracy: 
+   unknown_class 61.75000000000001%
+   joe biden 38.25%
+Number of frames: 400
+Test results for data/test/test_videos/multiple_people/biden_obama.mov on 2020-06-25 19:49:27
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 400
+Test results for data/test/test_videos/multiple_people/biden_obama2.mov on 2020-06-25 19:53:58
+Accuracy: 
+Number of frames: 0

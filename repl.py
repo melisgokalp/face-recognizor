@@ -86,7 +86,7 @@ def retrain_classifier(clf):
     ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
     data, labels, idx_to_name = ds.all()
     clf = clf.fit(data, labels)
-    print(ds.test())
+    # print(ds.test())
     return clf, idx_to_name
 
 
@@ -118,25 +118,17 @@ def add_face(clf, num_classes):
         # # embeddings = existing_face + embeddings
         # print("existing_face shape:", existing_face.shape)
         # embeddings = np.vstack([existing_face, embeddings])
-
         increment = 0
-    print("embeddings shape:", embeddings.shape)
     # save name and embeddings
     np.save(live_embeddings_loc + "/{}.npy".format(name), embeddings)
     return retrain_classifier(clf), increment
 
 def update_embedding(live_embeddings_loc, embeddings, name):
-    existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name)) 
-    print("existing_face shape:", existing_face.shape)
+    existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
     # size is like samplesx128 so change the sample size
     min_len = int(min(len(existing_face), len(embeddings))/2)
-    print("existing shape: ", existing_face.shape)
-    print("embeddings shape: ", existing_face.shape)
     existing_face = existing_face[np.random.choice(min_len, size=2, replace=False)]
     embeddings = embeddings[np.random.choice(min_len, size=2, replace=False)]
-
-    print("existing shape after: ", existing_face.shape)
-    print("embeddings shape after: ", existing_face.shape)
     embeddings = np.vstack([existing_face, embeddings])
     increment = 0
     return embeddings
@@ -236,9 +228,9 @@ def recognize(clf, num_classes, idx_to_name, testing):
 
 def write_log(test_res, videoname):
     print("Writing test result logs")
-    file1 = open("data/test/" + testname + " test results.txt", "a+")  # append mode
+    file1 = open("data/test/test_results/" + testname + " test results.txt", "a+")  # append mode
     file1.write('Test results for ' + file + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")   
-    print('\n'.join(test_res))
+    # print('\n'.join(test_res))
     # file1.write('\n'.join(test_res))
     file1.write("Accuracy: \n")
     for name in set(test_res):
@@ -246,7 +238,8 @@ def write_log(test_res, videoname):
     file1.write("Number of frames: {}\n".format(len(test_res)))
     if type(args["note"]) == str:
         file1.write("Note: "+args["note"]+"\n\n") 
-    print("Accuracy is {}%".format(test_res.count(testname)/len(test_res)*100))
+    test_res_l = max(len(test_res), 1)
+    print("Accuracy is {}%".format(test_res.count(testname)/test_res_l*100))
     file1.close()
 
 
@@ -287,7 +280,7 @@ if __name__ == "__main__":
 
     if args["test"]:
         files = glob.glob("data/test/test_videos/*/*")
-        random.shuffle(files)
+        # random.shuffle(files)
         for i in tqdm(range(len(files)), total=len(files)):
         # for file in files:
             file = files[i]
