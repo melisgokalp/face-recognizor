@@ -1,0 +1,26 @@
+Test results for data/test/test_videos/trevor_noah/trevor_noah1.mp4 on 2020-06-25 20:04:05
+Accuracy: 
+   unknown_class 15.5%
+   trevor noah 84.5%
+Number of frames: 200
+Test results for data/test/test_videos/trevor_noah/trevor_noah1.mov on 2020-06-25 20:06:31
+Accuracy: 
+   trevor noah 36.0%
+   unknown_class 64.0%
+Number of frames: 200
+Test results for data/test/test_videos/trevor_noah/trevor_noah1.mov on 2020-06-25 20:08:16
+Accuracy: 
+   trevor noah 45.0%
+   unknown_class 55.00000000000001%
+Number of frames: 200
+Test results for data/test/test_videos/trevor_noah/trevor_noah3.mov on 2020-06-25 20:10:28
+Accuracy: 
+   trevor noah 18.5%
+   unknown_class 81.5%
+Number of frames: 200
+Test results for data/test/test_videos/trevor_noah/trevor_noah2.m4v on 2020-06-25 20:11:47
+Accuracy: 
+   unknown_class 53.0%
+   trevor noah 36.0%
+   ramy youssef 11.0%
+Number of frames: 200

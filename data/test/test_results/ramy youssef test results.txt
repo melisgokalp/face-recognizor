@@ -3,3 +3,23 @@ Accuracy:
    unknown_class 35.361216730038024%
    ramy youssef 64.63878326996198%
 Number of frames: 263
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef5.m4v on 2020-06-25 20:17:26
+Accuracy: 
+   z multiple people 0.5%
+   unknown_class 90.0%
+   ramy youssef 9.5%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef3.mov on 2020-06-25 20:17:59
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef2.mov on 2020-06-25 20:18:39
+Accuracy: 
+   unknown_class 13.5%
+   ramy youssef 86.5%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef4.m4v on 2020-06-25 20:19:09
+Accuracy: 
+   unknown_class 37.0%
+   ramy youssef 63.0%
+Number of frames: 200

@@ -91,7 +91,9 @@ def retrain_classifier(clf):
 
 
 def add_face(clf, num_classes):
-    name = input("We don't recognize you! Please enter your name:\n").strip().lower()
+    name = testname
+    if not args["test"]:
+        name = input("We don't recognize you! Please enter your name:\n").strip().lower()
     increment = 1
     live_embeddings_loc = "data/embeddings/live"
     # while name in name_to_idx:
@@ -110,13 +112,11 @@ def add_face(clf, num_classes):
     embeddings = preprocess_batch(samples)
     embeddings = openFace(embeddings)
     embeddings = embeddings.detach().numpy()
-    print("embeddings shape:", embeddings.shape)
+
     if name in name_to_idx:
         print("Face exists, append to embeddings!")
         embeddings = update_embedding(live_embeddings_loc, embeddings, name)
         # existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
-        # # embeddings = existing_face + embeddings
-        # print("existing_face shape:", existing_face.shape)
         # embeddings = np.vstack([existing_face, embeddings])
         increment = 0
     # save name and embeddings
@@ -126,7 +126,9 @@ def add_face(clf, num_classes):
 def update_embedding(live_embeddings_loc, embeddings, name):
     existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
     # size is like samplesx128 so change the sample size
-    min_len = int(min(len(existing_face), len(embeddings))/2)
+    min_len = min(len(existing_face), len(embeddings))
+    if min_len > 200:
+        min_len = 100
     existing_face = existing_face[np.random.choice(min_len, size=2, replace=False)]
     embeddings = embeddings[np.random.choice(min_len, size=2, replace=False)]
     embeddings = np.vstack([existing_face, embeddings])
@@ -229,7 +231,7 @@ def recognize(clf, num_classes, idx_to_name, testing):
 def write_log(test_res, videoname):
     print("Writing test result logs")
     file1 = open("data/test/test_results/" + testname + " test results.txt", "a+")  # append mode
-    file1.write('Test results for ' + file + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")   
+    file1.write('Test results for ' + file + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")
     # print('\n'.join(test_res))
     # file1.write('\n'.join(test_res))
     file1.write("Accuracy: \n")
@@ -281,8 +283,8 @@ if __name__ == "__main__":
     if args["test"]:
         files = glob.glob("data/test/test_videos/*/*")
         # random.shuffle(files)
-        for i in tqdm(range(len(files)), total=len(files)):
-        # for file in files:
+        start = 13
+        for i in tqdm(range(start, len(files)), total=len(files)):
             file = files[i]
             video_capture = cv2.VideoCapture(file)
             testname = file.split("/")[-2].replace("_", " ")
