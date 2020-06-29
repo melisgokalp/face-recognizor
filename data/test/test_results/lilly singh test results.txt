@@ -1,0 +1,135 @@
+Test results for data/test/test_videos/lilly_singh/lilly_singh0.mov on 2020-06-25 20:29:32
+Accuracy: 
+   lilly singh 74.87437185929649%
+   unknown_class 25.125628140703515%
+Number of frames: 199
+Test results for data/test/test_videos/lilly_singh/lilly_singh2_15sec.mov on 2020-06-25 20:30:02
+Accuracy: 
+   lilly singh 93.0%
+   unknown_class 7.000000000000001%
+Number of frames: 200
+Test results for data/test/test_videos/lilly_singh/lilly_singh1.mov on 2020-06-25 20:32:10
+Accuracy: 
+   lilly singh 30.0%
+   unknown_class 70.0%
+Number of frames: 160
+Test results for data/test/test_videos/lilly_singh/lilly_singh0.mov on 2020-06-25 20:47:43
+Accuracy: 
+   unknown_class 98.38709677419355%
+   michelle obama 1.6129032258064515%
+Number of frames: 62
+Test results for data/test/test_videos/lilly_singh/lilly_singh0.mov on 2020-06-25 20:51:23
+Accuracy: 
+   lilly singh 79.72972972972973%
+   unknown_class 19.594594594594593%
+   michelle obama 0.6756756756756757%
+Number of frames: 148
+Test results for data/test/test_videos/lilly_singh/lilly_singh2_15sec.mov on 2020-06-25 20:52:01
+Accuracy: 
+   lilly singh 51.0%
+   unknown_class 32.5%
+   malala yousafzai 1.5%
+   michelle obama 15.0%
+Number of frames: 200
+Test results for data/test/test_videos/lilly_singh/lilly_singh1.mov on 2020-06-25 20:52:49
+Accuracy: 
+   lilly singh 65.0%
+   unknown_class 34.5%
+   michelle obama 0.5%
+Number of frames: 200
+testresults for lilly singh on 2020-06-29 17:28:41
+Accuracy: 
+   lilly singh 81.13207547169812%
+   unknown_class 14.465408805031446%
+   michelle obama 4.40251572327044%
+Number of frames: 159
+Note: 
+
+testresults for lilly singh on 2020-06-29 17:40:01
+Accuracy: 
+   lilly singh 99.49748743718592%
+   unknown_class 0.5025125628140703%
+Number of frames: 199
+Note: 
+
+testresults for lilly singh on 2020-06-29 18:13:11
+Accuracy: 
+   lilly singh 99.49748743718592%
+   unknown_class 0.5025125628140703%
+Number of frames: 199
+Note: 
+
+testresults for lilly singh on 2020-06-29 18:24:00
+Accuracy: 
+   lilly singh 99.49748743718592%
+   unknown_class 0.5025125628140703%
+Number of frames: 199
+Note: 
+
+testresults for lilly singh on 2020-06-29 18:26:05
+Accuracy: 
+   lilly singh 99.49748743718592%
+   unknown_class 0.5025125628140703%
+Number of frames: 199
+Note: 
+
+testresults for lilly singh on 2020-06-29 18:47:22
+Accuracy: 
+   lilly singh 59.0%
+   unknown_class 40.0%
+   michelle obama 0.5%
+   malala yousafzai 0.5%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-06-29 19:10:03
+Accuracy: 
+   lilly singh 99.49748743718592%
+   unknown_class 0.5025125628140703%
+Number of frames: 199
+Note: 
+
+testresults for lilly singh on 2020-06-29 19:30:07
+Accuracy: 
+   lilly singh 98.99497487437185%
+   unknown_class 1.0050251256281406%
+Number of frames: 199
+Note: 
+
+testresults for lilly singh on 2020-06-29 19:35:41
+Accuracy: 
+   unknown_class 0.5025125628140703%
+   lilly singh 99.49748743718592%
+Number of frames: 199
+Note: 
+
+testresults for lilly singh on 2020-06-29 19:48:38
+Accuracy: 
+   lilly singh 82.95454545454545%
+   unknown_class 17.045454545454543%
+Number of frames: 176
+Note: 
+
+testresults for lilly singh on 2020-06-29 20:02:26
+Accuracy: 
+   lilly singh 71.5%
+   unknown_class 27.500000000000004%
+   malala yousafzai 0.5%
+   michelle obama 0.5%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-06-29 20:04:30
+Accuracy: 
+   lilly singh 68.0%
+   unknown_class 32.0%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-06-29 20:14:53
+Accuracy: 
+   unknown_class 33.5%
+   lilly singh 66.5%
+Number of frames: 200
+Note: 
+

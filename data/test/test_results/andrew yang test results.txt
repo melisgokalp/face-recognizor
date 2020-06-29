@@ -11,3 +11,58 @@ Test results for data/test/test_videos/andrew_yang/andrew_yang1.mov on 2020-06-2
 Accuracy: 
    andrew yang 100.0%
 Number of frames: 200
+testresults for andrew yang on 2020-06-29 18:16:56
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-06-29 18:20:15
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-06-29 18:31:19
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-06-29 18:39:53
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-06-29 19:30:32
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-06-29 19:38:28
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-06-29 19:50:12
+Accuracy: 
+   unknown_class 15.0%
+   andrew yang 85.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-06-29 19:58:13
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-06-29 20:11:25
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+

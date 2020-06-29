@@ -20,3 +20,45 @@ Accuracy:
    barack obama 1.25%
    unknown_class 40.625%
 Number of frames: 160
+Test results for data/test/test_videos/z_multiple_people/bernie_biden.mov on 2020-06-25 20:20:53
+Accuracy: 
+   joe biden 50.0%
+   unknown_class 50.0%
+Number of frames: 400
+Test results for data/test/test_videos/z_multiple_people/biden_obama.mov on 2020-06-25 20:21:32
+Accuracy: 
+   joe biden 22.75%
+   unknown_class 54.0%
+   barack obama 23.25%
+Number of frames: 400
+Test results for data/test/test_videos/z_multiple_people/lily_michelle_15sec.mov on 2020-06-25 20:22:09
+Accuracy: 
+   lilly singh 65.14657980456026%
+   unknown_class 34.85342019543974%
+Number of frames: 307
+Test results for data/test/test_videos/z_multiple_people/biden_obama2.mov on 2020-06-25 20:23:21
+Accuracy: 
+   z multiple people 58.12500000000001%
+   unknown_class 40.625%
+   barack obama 1.25%
+Number of frames: 160
+Test results for data/test/test_videos/z_multiple_people/biden_obama.mov on 2020-06-25 20:36:14
+Accuracy: 
+   unknown_class 49.25%
+   joe biden 26.25%
+   barack obama 24.5%
+Number of frames: 400
+Test results for data/test/test_videos/z_multiple_people/bernie_biden.mov on 2020-06-25 20:43:41
+Accuracy: 
+   joe biden 50.0%
+   unknown_class 49.5%
+   bernie sanders 0.5%
+Number of frames: 400
+testresults for z multiple people on 2020-06-29 20:05:14
+Accuracy: 
+   joe biden 22.75%
+   barack obama 15.25%
+   unknown_class 62.0%
+Number of frames: 400
+Note: 
+

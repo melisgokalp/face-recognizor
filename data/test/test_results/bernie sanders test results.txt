@@ -3,3 +3,76 @@ Accuracy:
    bernie sanders 99.5%
    unknown_class 0.5%
 Number of frames: 200
+Test results for data/test/test_videos/bernie_sanders/bernie_sanders.mov on 2020-06-25 20:28:39
+Accuracy: 
+   unknown_class 15.0%
+   bernie sanders 85.0%
+Number of frames: 200
+Test results for data/test/test_videos/bernie_sanders/bernie_sanders1.mov on 2020-06-25 20:29:02
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 26
+testresults for bernie sanders on 2020-06-29 17:45:22
+Accuracy: 
+   unknown_class 15.0%
+   bernie sanders 85.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-06-29 18:18:45
+Accuracy: 
+   bernie sanders 100.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-06-29 18:23:27
+Accuracy: 
+   bernie sanders 100.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-06-29 18:28:56
+Accuracy: 
+   bernie sanders 100.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-06-29 18:43:41
+Accuracy: 
+   bernie sanders 77.43589743589745%
+   unknown_class 22.564102564102566%
+Number of frames: 195
+Note: 
+
+testresults for bernie sanders on 2020-06-29 19:30:58
+Accuracy: 
+   bernie sanders 100.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-06-29 19:37:32
+Accuracy: 
+   bernie sanders 100.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-06-29 19:54:34
+Accuracy: 
+   bernie sanders 100.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-06-29 20:01:40
+Accuracy: 
+   unknown_class 22.564102564102566%
+   bernie sanders 77.43589743589745%
+Number of frames: 195
+Note: 
+
+testresults for bernie sanders on 2020-06-29 20:12:47
+Accuracy: 
+   unknown_class 96.15384615384616%
+   bernie sanders 3.8461538461538463%
+Number of frames: 26
+Note: 
+

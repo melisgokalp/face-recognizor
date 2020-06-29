@@ -47,5 +47,5 @@ threeplot = plotly.graph_objs.Scatter3d(
     text = names
 )
 
-plotly.offline.plot([plot], filename="data/visualization/embeddings.html")
-plotly.offline.plot([threeplot], filename="data/visualization/embeddings3d.html")
+plotly.offline.plot([plot], filename="data/visualization/embeddings1.html")
+plotly.offline.plot([threeplot], filename="data/visualization/embeddings3d1.html")

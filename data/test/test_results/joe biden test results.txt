@@ -3,3 +3,108 @@ Accuracy:
    unknown_class 15.0%
    joe biden 85.0%
 Number of frames: 200
+Test results for data/test/test_videos/joe_biden/joe_biden.mov on 2020-06-25 20:26:47
+Accuracy: 
+   joe biden 96.0%
+   unknown_class 4.0%
+Number of frames: 200
+Test results for data/test/test_videos/joe_biden/joe_biden1.mov on 2020-06-25 20:27:16
+Accuracy: 
+   joe biden 100.0%
+Number of frames: 200
+testresults for joe biden on 2020-06-29 17:10:04
+Accuracy: 
+   unknown_class 15.0%
+   joe biden 85.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 17:37:20
+Accuracy: 
+   joe biden 96.0%
+   unknown_class 4.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 17:42:52
+Accuracy: 
+   joe biden 96.0%
+   unknown_class 4.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 17:52:07
+Accuracy: 
+   unknown_class 4.0%
+   joe biden 96.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 17:53:57
+Accuracy: 
+   unknown_class 4.0%
+   joe biden 96.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 18:18:13
+Accuracy: 
+   joe biden 96.0%
+   unknown_class 4.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 18:25:05
+Accuracy: 
+   unknown_class 4.0%
+   joe biden 96.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 18:30:31
+Accuracy: 
+   joe biden 96.0%
+   unknown_class 4.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 18:53:16
+Accuracy: 
+   joe biden 100.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 19:31:22
+Accuracy: 
+   unknown_class 4.0%
+   joe biden 96.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 19:35:02
+Accuracy: 
+   unknown_class 4.0%
+   joe biden 96.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 19:45:45
+Accuracy: 
+   joe biden 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 19:55:12
+Accuracy: 
+   joe biden 100.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-06-29 20:17:15
+Accuracy: 
+   unknown_class 5.555555555555555%
+   joe biden 94.44444444444444%
+Number of frames: 90
+Note: 
+

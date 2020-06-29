@@ -23,3 +23,143 @@ Accuracy:
    unknown_class 37.0%
    ramy youssef 63.0%
 Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef5.m4v on 2020-06-25 20:23:54
+Accuracy: 
+   ramy youssef 79.0%
+   unknown_class 21.0%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef3.mov on 2020-06-25 20:24:26
+Accuracy: 
+   ramy youssef 97.0%
+   unknown_class 3.0%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef2.mov on 2020-06-25 20:25:03
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef4.m4v on 2020-06-25 20:25:33
+Accuracy: 
+   ramy youssef 59.0%
+   unknown_class 41.0%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef1.mov on 2020-06-25 20:26:17
+Accuracy: 
+   ramy youssef 91.0%
+   unknown_class 9.0%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef5.m4v on 2020-06-25 20:39:02
+Accuracy: 
+   unknown_class 65.5%
+   ramy youssef 34.5%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef1.mov on 2020-06-25 20:42:55
+Accuracy: 
+   unknown_class 74.5%
+   ramy youssef 25.5%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef2.mov on 2020-06-25 20:45:54
+Accuracy: 
+   unknown_class 19.0%
+   ramy youssef 81.0%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef5.m4v on 2020-06-25 20:54:43
+Accuracy: 
+   ramy youssef 81.0%
+   unknown_class 19.0%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef3.mov on 2020-06-25 20:56:19
+Accuracy: 
+   ramy youssef 59.0%
+   unknown_class 41.0%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef2.mov on 2020-06-25 20:57:34
+Accuracy: 
+   ramy youssef 1.0%
+   unknown_class 99.0%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef4.m4v on 2020-06-25 20:59:12
+Accuracy: 
+   ramy youssef 9.5%
+   unknown_class 90.5%
+Number of frames: 200
+Test results for data/test/test_videos/ramy_youssef/ramy_youssef1.mov on 2020-06-25 21:00:06
+Accuracy: 
+   ramy youssef 4.5%
+   unknown_class 95.5%
+Number of frames: 200
+testresults for ramy youssef on 2020-06-29 17:23:50
+Accuracy: 
+   ramy youssef 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 17:39:28
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 17:50:44
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 18:16:26
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 18:22:20
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 18:29:50
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 19:08:10
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 19:34:00
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 19:53:54
+Accuracy: 
+   ramy youssef 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 19:59:43
+Accuracy: 
+   ramy youssef 100.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 20:12:07
+Accuracy: 
+   unknown_class 1.0%
+   ramy youssef 99.0%
+Number of frames: 200
+Note: 
+
+testresults for ramy youssef on 2020-06-29 20:16:08
+Accuracy: 
+   unknown_class 3.0%
+   ramy youssef 97.0%
+Number of frames: 200
+Note: 
+

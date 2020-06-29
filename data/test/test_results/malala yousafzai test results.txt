@@ -10,3 +10,64 @@ Test results for data/test/test_videos/malala_yousafzai/malala_yousafzai1.mov on
 Accuracy: 
    malala yousafzai 100.0%
 Number of frames: 200
+Test results for data/test/test_videos/malala_yousafzai/malala_yousafzai2.mov on 2020-06-25 20:41:56
+Accuracy: 
+   unknown_class 15.5%
+   malala yousafzai 84.5%
+Number of frames: 200
+testresults for malala yousafzai on 2020-06-29 18:15:39
+Accuracy: 
+   malala yousafzai 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for malala yousafzai on 2020-06-29 18:21:34
+Accuracy: 
+   malala yousafzai 100.0%
+Number of frames: 200
+Note: 
+
+testresults for malala yousafzai on 2020-06-29 18:27:53
+Accuracy: 
+   malala yousafzai 100.0%
+Number of frames: 200
+Note: 
+
+testresults for malala yousafzai on 2020-06-29 19:03:10
+Accuracy: 
+   malala yousafzai 100.0%
+Number of frames: 200
+Note: 
+
+testresults for malala yousafzai on 2020-06-29 19:25:10
+Accuracy: 
+   malala yousafzai 100.0%
+Number of frames: 200
+Note: 
+
+testresults for malala yousafzai on 2020-06-29 19:33:15
+Accuracy: 
+   malala yousafzai 100.0%
+Number of frames: 200
+Note: 
+
+testresults for malala yousafzai on 2020-06-29 19:44:09
+Accuracy: 
+   unknown_class 15.0%
+   malala yousafzai 85.0%
+Number of frames: 200
+Note: 
+
+testresults for malala yousafzai on 2020-06-29 19:56:21
+Accuracy: 
+   malala yousafzai 100.0%
+Number of frames: 200
+Note: 
+
+testresults for malala yousafzai on 2020-06-29 20:18:03
+Accuracy: 
+   malala yousafzai 100.0%
+Number of frames: 200
+Note: 
+

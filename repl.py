@@ -12,11 +12,10 @@ from tqdm import tqdm
 from PIL import Image
 import os
 import datetime
-# from testing import test
 import glob
 import random
 import sys
-
+import test_mod as tmod
 from align_faces import extract_faces, align_faces
 from dataset import FaceDataset
 from openface import load_openface, preprocess_batch
@@ -58,7 +57,7 @@ def capture_faces(seconds=20, sampling_duration=0.1, debug=False):
         time.sleep(sampling_duration - ((time.time() - start_time) % sampling_duration))
 
     # extract the faces afterwards
-    print("Extracting faces from samples")
+    print("Extracting faces from samples\n")
     samples = []
     for i in tqdm(range(len(face_locs)), total=len(face_locs)):
         rect = face_locs[i]
@@ -92,7 +91,7 @@ def retrain_classifier(clf):
 
 def add_face(clf, num_classes):
     name = testname
-    if not args["test"]:
+    if not args["train"]:
         name = input("We don't recognize you! Please enter your name:\n").strip().lower()
     increment = 1
     live_embeddings_loc = "data/embeddings/live"
@@ -114,10 +113,8 @@ def add_face(clf, num_classes):
     embeddings = embeddings.detach().numpy()
 
     if name in name_to_idx:
-        print("Face exists, append to embeddings!")
+        print("Face exists, append to embeddings!\n")
         embeddings = update_embedding(live_embeddings_loc, embeddings, name)
-        # existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
-        # embeddings = np.vstack([existing_face, embeddings])
         increment = 0
     # save name and embeddings
     np.save(live_embeddings_loc + "/{}.npy".format(name), embeddings)
@@ -127,7 +124,7 @@ def update_embedding(live_embeddings_loc, embeddings, name):
     existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
     # size is like samplesx128 so change the sample size
     min_len = min(len(existing_face), len(embeddings))
-    if min_len > 200:
+    if min_len > 100:
         min_len = 100
     existing_face = existing_face[np.random.choice(min_len, size=2, replace=False)]
     embeddings = embeddings[np.random.choice(min_len, size=2, replace=False)]
@@ -147,7 +144,7 @@ def load_model():
     clf = clf.fit(data, labels)
     return clf, num_classes, ds.ix_to_name
 
-def recognize(clf, num_classes, idx_to_name, testing): 
+def recognize(clf, num_classes, idx_to_name, testing):
     # to store previous confidences to determine whether a face exists
     prev_conf = deque(maxlen=CONF_TO_STORE)
     f_count = 1
@@ -215,7 +212,7 @@ def recognize(clf, num_classes, idx_to_name, testing):
         else:
             if testing: break
             print("ERROR: no frame captured")
-    if testing:  write_log(test_results, names)
+    if testing:  tmod.plot_acc(testname, test_results)
     video_capture.release()
     cv2.destroyAllWindows()
 
@@ -242,6 +239,7 @@ def write_log(test_res, videoname):
         file1.write("Note: "+args["note"]+"\n\n") 
     test_res_l = max(len(test_res), 1)
     print("Accuracy is {}%".format(test_res.count(testname)/test_res_l*100))
+    # plot_acc(testname,test_res)
     file1.close()
 
 
@@ -249,7 +247,9 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--gpu", action="store_true", help="run with this flag to run on a GPU")
+    parser.add_argument("--train", action="store_true", help="run with this flag to train and dev the model") 
     parser.add_argument("--test", action="store_true", help="run with this flag to test the model") 
+    parser.add_argument("--live", action="store_true", help="run with this flag to have a camera demo") 
     parser.add_argument('--note', action='store', type=str, help='The text to parse.')
 
     args = vars(parser.parse_args())
@@ -280,23 +280,43 @@ if __name__ == "__main__":
     # cannot function as a classifier if less than 2 classes
     assert num_classes >= 2
 
-    if args["test"]:
-        files = glob.glob("data/test/test_videos/*/*")
-        # random.shuffle(files)
-        start = 13
+    if args["train"] or  args["test"]:
+        files = glob.glob("data/test/test_videos/trevor_noah/*")
+        random.shuffle(files)
+        start = 0
+        # files.sort()
+        trains = [x for x in files if "train" in x ]
+        devs = [x for x in files if "dev" in x ]
+        tests = [x for x in files if "testing" in x ]
+        files = []
+        mode = ""
+        if args["train"]:
+            files += trains + devs
+            mode += "Training "
+        if args["test"]:
+            files += tests
+            mode += "Testing "
+        # print(files)
+        # random.shuffle(trains)
         for i in tqdm(range(start, len(files)), total=len(files)):
             file = files[i]
             video_capture = cv2.VideoCapture(file)
             testname = file.split("/")[-2].replace("_", " ")
-            print("Testing " + testname + " for file " + file)
+            print(mode + testname + " for file " + file)
             name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
-            recognize(clf, num_classes, idx_to_name, args["test"])
+            recognize(clf, num_classes, idx_to_name, True)
             clf, num_classes, idx_to_name = load_model()
-        print("DONE TESTING!!")
-    else:
+        print("DONE!! Mode was " + mode)
+        tmod.plot()
+    if args["live"]:
         print("Starting video capture...")
         video_capture = cv2.VideoCapture(0)
         recognize(clf, num_classes, idx_to_name, args["test"])
+
+
+
+
+
     # clf, num_classes, idx_to_name = load_model()
     # print(idx_to_name)
     # # cannot function as a classifier if less than 2 classes

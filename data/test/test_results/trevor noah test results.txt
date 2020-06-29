@@ -24,3 +24,106 @@ Accuracy:
    trevor noah 36.0%
    ramy youssef 11.0%
 Number of frames: 200
+Test results for data/test/test_videos/trevor_noah/trevor_noah1.mov on 2020-06-25 20:35:39
+Accuracy: 
+   unknown_class 97.0%
+   trevor noah 3.0%
+Number of frames: 200
+Test results for data/test/test_videos/trevor_noah/trevor_noah2.m4v on 2020-06-25 20:38:27
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 200
+Test results for data/test/test_videos/trevor_noah/trevor_noah1.mp4 on 2020-06-25 20:53:39
+Accuracy: 
+   trevor noah 74.0%
+   unknown_class 26.0%
+Number of frames: 200
+Test results for data/test/test_videos/trevor_noah/trevor_noah1.mov on 2020-06-25 20:55:36
+Accuracy: 
+   unknown_class 65.5%
+   trevor noah 34.5%
+Number of frames: 200
+Test results for data/test/test_videos/trevor_noah/trevor_noah3.mov on 2020-06-25 20:58:48
+Accuracy: 
+   trevor noah 4.5%
+   unknown_class 95.5%
+Number of frames: 200
+testresults for trevor noah on 2020-06-29 17:14:28
+Accuracy: 
+   trevor noah 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-06-29 17:26:55
+Accuracy: 
+   trevor noah 100.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-06-29 18:17:42
+Accuracy: 
+   trevor noah 100.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-06-29 18:21:01
+Accuracy: 
+   trevor noah 100.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-06-29 18:26:51
+Accuracy: 
+   trevor noah 100.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-06-29 18:36:24
+Accuracy: 
+   trevor noah 14.499999999999998%
+   unknown_class 85.5%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-06-29 19:36:54
+Accuracy: 
+   unknown_class 76.5%
+   trevor noah 23.5%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-06-29 19:51:39
+Accuracy: 
+   trevor noah 84.5%
+   unknown_class 15.5%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-06-29 20:03:46
+Accuracy: 
+   trevor noah 21.0%
+   unknown_class 79.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-06-29 20:10:37
+Accuracy: 
+   unknown_class 97.43589743589743%
+   trevor noah 2.564102564102564%
+Number of frames: 195
+Note: 
+
+testresults for trevor noah on 2020-06-29 20:19:45
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-06-29 20:36:22
+Accuracy: 
+   trevor noah 3.0%
+   unknown_class 97.0%
+Number of frames: 200
+Note: 
+
