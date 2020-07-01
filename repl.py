@@ -122,13 +122,12 @@ def add_face(clf, num_classes):
 
 def update_embedding(live_embeddings_loc, embeddings, name):
     existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
-    # size is like samplesx128 so change the sample size
-    min_len = min(len(existing_face), len(embeddings))
-    if min_len > 100:
-        min_len = 100
-    existing_face = existing_face[np.random.choice(min_len, size=2, replace=False)]
-    embeddings = embeddings[np.random.choice(min_len, size=2, replace=False)]
+    # size is like samplesx128 so change the sample size 
+    len_existing = min(100, len(existing_face)
+    existing_face = existing_face[np.random.choice(len_existing), size=2, replace=False)]
+    embeddings = embeddings[np.random.choice(max(100, 200-len_existing), size=2, replace=False)]
     embeddings = np.vstack([existing_face, embeddings])
+    len(embeddings)
     increment = 0
     return embeddings
 
