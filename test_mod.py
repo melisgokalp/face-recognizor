@@ -79,6 +79,9 @@ def plot():
         print(vals[i])
         print(keys[i])
         plt.plot(vals[i], label = keys[i], marker='o', markerfacecolor='blue', markersize=5)
+        val = vals[i]
+        for i in range(len(val)):
+            plt.annotate("{:.2f}".format(val[i]),(i,val[i]), textcoords="offset points", xytext=(0,10), ha='center')
     # for col in dat_dict.keys():
     #     print(col)
     #     plt.plot(  col, data=df, marker='o', markerfacecolor='blue', markersize=12, color='skyblue', linewidth=4)
@@ -87,7 +90,12 @@ def plot():
     # plt.plot( 'x', 'y1', data=df, marker='o', markerfacecolor='blue', markersize=12, color='skyblue', linewidth=4)
     # plt.plot( 'x', 'y2', data=df, marker='', color='olive', linewidth=2)
     # plt.plot( 'x', 'y3', data=df, marker='', color='olive', linewidth=2, linestyle='dashed', label="toto")
+
     plt.legend()
+    plt.ylabel('Accuracy (%)')
+    plt.title('Accuracies throughout training and testing')
+    plt.xticks(np.arange(0,4,1),labels = ["train", "dev", "test", "test 2"])
+    plt.grid()
     plt.show()
     plt.savefig('test.png')
     # p_same = len(truth_labels)
