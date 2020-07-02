@@ -122,18 +122,19 @@ def add_face(clf, num_classes):
 
 def update_embedding(live_embeddings_loc, embeddings, name):
     existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
-    # size is like samplesx128 so change the sample size 
-    len_existing = min(100, len(existing_face))
-    existing_face = existing_face[np.random.choice(len_existing, size=2, replace=False)]
-    embeddings = embeddings[np.random.choice(max(100, 200-len_existing), size=2, replace=False)]
+    # size is like samplesx128 so change the sample size
+
+    # len_existing = min(100, len(existing_face))
+    # existing_face = existing_face[np.random.choice(len_existing, size=2, replace=False)]
+    # embeddings = embeddings[np.random.choice(max(100, 200-len_existing), size=2, replace=False)]
     embeddings = np.vstack([existing_face, embeddings])
-    len(embeddings)
-    increment = 0
-    return embeddings
+    np.random.shuffle(embeddings)
+    print(len(embeddings))
+    return embeddings[:200]
 
 def load_model():
     # TODO: in the future we should look at model persistence to disk
-    clf = svm.SVC(kernel="linear", C=1.6, probability=True)
+    clf = svm.SVC(kernel="poly", C=1.0, probability=True)
     #network = BinaryFaceNetwork(device)
     #network.load_state_dict(torch.load("data/binary_face_classifier.pt", map_location=device))
     #clf = BinaryFaceClassifier(network, 0.5)
@@ -280,7 +281,7 @@ if __name__ == "__main__":
     assert num_classes >= 2
 
     if args["train"] or  args["test"]:
-        files = glob.glob("data/test/test_videos/trevor_noah/*")
+        files = glob.glob("data/test/test_videos/*/*")
         random.shuffle(files)
         start = 0
         # files.sort()

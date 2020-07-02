@@ -19,12 +19,7 @@ import numpy as np
 import pandas as pd
 from numpy import save, load
 import os.path
-
-
-def test():
-    files = glob.glob("data/test/test_videos/*/*")
-    # recognize()
-    # return testfile, testname
+from tabulate import tabulate
 
 def accuracy(truth_labels, tested_labels):
     p_same = len(truth_labels)
@@ -62,7 +57,7 @@ def plot_acc(testname, data, mode = "test", note = ""):
 def plot():
 
     dat_dict = {}
-    for file in glob.glob("data/test/test_results/accs/*"):
+    for file in glob.glob("data/test/test_results/accs/*.npy"):
         name = (file.split("/")[-1].replace("_", " ")).split(".")[0]
         dat_dict[name] = load(file)
     # dat_dict['x'] = np.asarray(range(len(data)))
@@ -75,9 +70,15 @@ def plot():
     # plt.plot(list(dat_dict.values())[0], label=list(dat_dict.keys()))
     keys = list(dat_dict.keys())
     vals = list(dat_dict.values())
+
+    df = pd.DataFrame(dat_dict) 
+    file1 = open("data/test/test_results/table_results.txt", "a+")  # append mode
+    file1.write(tabulate(df, headers='keys', tablefmt='psql'))
+    file1.close()
+
     for i in range(len(keys)):
-        print(vals[i])
-        print(keys[i])
+        # print(vals[i])
+        # print(keys[i])
         plt.plot(vals[i], label = keys[i], marker='o', markerfacecolor='blue', markersize=5)
         val = vals[i]
         for i in range(len(val)):
@@ -94,7 +95,7 @@ def plot():
     plt.legend()
     plt.ylabel('Accuracy (%)')
     plt.title('Accuracies throughout training and testing')
-    plt.xticks(np.arange(0,4,1),labels = ["train", "dev", "test", "test 2"])
+    plt.xticks(np.arange(0,3,1),labels = ["train", "dev", "test"])
     plt.grid()
     plt.show()
     plt.savefig('test.png')
