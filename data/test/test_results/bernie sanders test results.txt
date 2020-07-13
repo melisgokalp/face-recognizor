@@ -76,3 +76,92 @@ Accuracy:
 Number of frames: 26
 Note: 
 
+testresults for bernie sanders on 2020-07-02 13:43:50
+Accuracy: 
+   unknown_class 15.0%
+   bernie sanders 85.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-07-02 13:47:15
+Accuracy: 
+   unknown_class 50.505050505050505%
+   bernie sanders 49.494949494949495%
+Number of frames: 198
+Note: 
+
+testresults for bernie sanders on 2020-07-02 13:58:00
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 26
+Note: 
+
+testresults for bernie sanders on 2020-07-02 15:15:06
+Accuracy: 
+   bernie sanders 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-07-02 15:41:31
+Accuracy: 
+   bernie sanders 72.72727272727273%
+   unknown_class 27.27272727272727%
+Number of frames: 198
+Note: 
+
+testresults for bernie sanders on 2020-07-02 15:44:49
+Accuracy: 
+   bernie sanders 23.076923076923077%
+   unknown_class 76.92307692307693%
+Number of frames: 26
+Note: 
+
+testresults for bernie sanders on 2020-07-02 16:16:12
+Accuracy: 
+   bernie sanders 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-07-02 16:32:38
+Accuracy: 
+   unknown_class 18.974358974358974%
+   bernie sanders 81.02564102564102%
+Number of frames: 195
+Note: 
+
+testresults for bernie sanders on 2020-07-02 16:53:15
+Accuracy: 
+   unknown_class 23.076923076923077%
+   bernie sanders 76.92307692307693%
+Number of frames: 26
+Note: 
+
+testresults for bernie sanders on 2020-07-02 18:07:14
+Accuracy: 
+   bernie sanders 61.0%
+   unknown_class 39.0%
+Number of frames: 200
+Note: 
+
+testresults for bernie sanders on 2020-07-02 19:03:23
+Accuracy: 
+   bernie sanders 13.333333333333334%
+   unknown_class 86.66666666666667%
+Number of frames: 195
+Note: 
+
+testresults for bernie sanders on 2020-07-02 19:22:09
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 26
+Note: 
+
+testresults for bernie sanders on 2020-07-09 21:25:09
+Accuracy: 
+   bernie sanders 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+

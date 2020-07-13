@@ -123,10 +123,6 @@ def add_face(clf, num_classes):
 def update_embedding(live_embeddings_loc, embeddings, name):
     existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
     # size is like samplesx128 so change the sample size
-
-    # len_existing = min(100, len(existing_face))
-    # existing_face = existing_face[np.random.choice(len_existing, size=2, replace=False)]
-    # embeddings = embeddings[np.random.choice(max(100, 200-len_existing), size=2, replace=False)]
     embeddings = np.vstack([existing_face, embeddings])
     np.random.shuffle(embeddings)
     print(len(embeddings))
@@ -134,7 +130,7 @@ def update_embedding(live_embeddings_loc, embeddings, name):
 
 def load_model():
     # TODO: in the future we should look at model persistence to disk
-    clf = svm.SVC(kernel="poly", C=1.0, probability=True)
+    clf = svm.SVC(kernel="rbf", C=1.0, probability=True)
     #network = BinaryFaceNetwork(device)
     #network.load_state_dict(torch.load("data/binary_face_classifier.pt", map_location=device))
     #clf = BinaryFaceClassifier(network, 0.5)
@@ -148,6 +144,7 @@ def recognize(clf, num_classes, idx_to_name, testing):
     # to store previous confidences to determine whether a face exists
     prev_conf = deque(maxlen=CONF_TO_STORE)
     f_count = 1
+    global CONF_THRESHOLD 
     names = []
     if testing:
         print("Starting the test...")
@@ -157,6 +154,8 @@ def recognize(clf, num_classes, idx_to_name, testing):
     else:
         print("Starting video capture...")
         # video_capture = cv2.VideoCapture(0)
+    CONF_THRESHOLD += 0.2/num_classes
+    print(CONF_THRESHOLD)
     while True and f_count<= 200:
         # ret is error code but we don't care about it
         ret, frame = video_capture.read()
@@ -251,6 +250,7 @@ if __name__ == "__main__":
     parser.add_argument("--test", action="store_true", help="run with this flag to test the model") 
     parser.add_argument("--live", action="store_true", help="run with this flag to have a camera demo") 
     parser.add_argument('--note', action='store', type=str, help='The text to parse.')
+    parser.add_argument('--clean', action='store_true', help='run with this flag to remove previous embeddings')
 
     args = vars(parser.parse_args())
     device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
@@ -279,6 +279,13 @@ if __name__ == "__main__":
     print(idx_to_name)
     # cannot function as a classifier if less than 2 classes
     assert num_classes >= 2
+
+    if args["clean"]:
+        files = glob.glob('data/embeddings/live/*.npy')
+        print(files)
+        for f in files[:-1]:
+            os.remove(f)
+        print(glob.glob('data/embeddings/live/*.npy'))
 
     if args["train"] or  args["test"]:
         files = glob.glob("data/test/test_videos/*/*")

@@ -108,3 +108,90 @@ Accuracy:
 Number of frames: 90
 Note: 
 
+testresults for joe biden on 2020-07-02 13:37:48
+Accuracy: 
+   unknown_class 15.5%
+   joe biden 84.5%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-07-02 13:51:59
+Accuracy: 
+   unknown_class 0.5%
+   joe biden 99.5%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-07-02 14:03:10
+Accuracy: 
+   unknown_class 6.666666666666667%
+   joe biden 93.33333333333333%
+Number of frames: 90
+Note: 
+
+testresults for joe biden on 2020-07-02 15:25:44
+Accuracy: 
+   joe biden 84.0%
+   unknown_class 16.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-07-02 15:37:59
+Accuracy: 
+   joe biden 100.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-07-02 15:52:01
+Accuracy: 
+   joe biden 86.66666666666667%
+   unknown_class 13.333333333333334%
+Number of frames: 90
+Note: 
+
+testresults for joe biden on 2020-07-02 16:22:47
+Accuracy: 
+   joe biden 82.0%
+   unknown_class 18.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-07-02 16:41:29
+Accuracy: 
+   joe biden 100.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-07-02 17:05:48
+Accuracy: 
+   joe biden 84.44444444444444%
+   unknown_class 15.555555555555555%
+Number of frames: 90
+Note: 
+
+testresults for joe biden on 2020-07-02 18:03:43
+Accuracy: 
+   unknown_class 33.5%
+   joe biden 66.5%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-07-02 18:26:11
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 200
+Note: 
+
+testresults for joe biden on 2020-07-02 19:11:18
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 90
+Note: 
+
+testresults for joe biden on 2020-07-09 21:23:28
+Accuracy: 
+   joe biden 96.0%
+   unknown_class 4.0%
+Number of frames: 200
+Note: 
+

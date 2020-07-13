@@ -217,3 +217,93 @@ Accuracy:
 Number of frames: 185
 Note: 
 
+testresults for trevor noah on 2020-07-02 13:45:12
+Accuracy: 
+   unknown_class 15.0%
+   trevor noah 85.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 13:49:53
+Accuracy: 
+   unknown_class 92.5%
+   trevor noah 7.5%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 14:00:08
+Accuracy: 
+   unknown_class 90.5%
+   trevor noah 9.5%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 15:12:08
+Accuracy: 
+   trevor noah 84.5%
+   unknown_class 15.5%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 15:36:50
+Accuracy: 
+   trevor noah 76.0%
+   unknown_class 24.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 15:49:19
+Accuracy: 
+   trevor noah 55.00000000000001%
+   unknown_class 45.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 16:10:38
+Accuracy: 
+   trevor noah 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 16:45:48
+Accuracy: 
+   trevor noah 74.0%
+   unknown_class 26.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 16:49:39
+Accuracy: 
+   trevor noah 79.5%
+   unknown_class 20.5%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 18:15:22
+Accuracy: 
+   unknown_class 18.5%
+   trevor noah 81.5%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 18:54:12
+Accuracy: 
+   unknown_class 99.5%
+   lilly singh 0.5%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-02 19:20:17
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 200
+Note: 
+
+testresults for trevor noah on 2020-07-09 21:26:55
+Accuracy: 
+   unknown_class 18.0%
+   trevor noah 82.0%
+Number of frames: 200
+Note: 
+

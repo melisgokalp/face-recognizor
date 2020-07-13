@@ -21,6 +21,8 @@ from numpy import save, load
 import os.path
 from tabulate import tabulate
 
+namedict = {'andrew yang':0, 'barack obama':1, 'bernie sanders':2, 'joe biden':3, 'lilly singh':4, 'malala yousafzai': 5, 'michelle obama':6, 'ramy youssef':7, 'trevor noah':8, 'unknown_class':9}
+
 def accuracy(truth_labels, tested_labels):
     p_same = len(truth_labels)
     true_accepts = truth_labels == tested_labels
@@ -34,24 +36,26 @@ def accuracy(truth_labels, tested_labels):
 def plot_acc(testname, data, mode = "test", note = ""):
     file1 = open("data/test/test_results/" + testname + " test results.txt", "a+")  # append mode
     file1.write(mode + 'results for ' + testname + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")
-    # print('\n'.join(test_res))
-    # file1.write('\n'.join(test_res))
     file1.write("Accuracy: \n")
+    onehot = np.zeros((10,1))
     for name in set(data):
-        file1.write("   "+name + " {}%\n".format(data.count(name)/len(data)*100))
+        acc = data.count(name)/len(data)*100
+        file1.write("   "+name + " {}%\n".format(acc))
+        onehot[namedict[name]] = acc
+
     file1.write("Number of frames: {}\n".format(len(data))) 
     file1.write("Note: "+ note+"\n\n") 
     test_res_l = max(len(data), 1)
     print("Accuracy is {}%".format(data.count(testname)/test_res_l*100))
     file1.close()
     # Save result
-    acc = data.count(testname)/len(data)*100
     potfile = "data/test/test_results/accs/" + testname + ".npy"
+    files = glob.glob('data/embeddings/live/*.npy')
     data = np.asarray([])
     if os.path.isfile(potfile):
         data = load("data/test/test_results/accs/" + testname + ".npy")
-    data = np.append(data,acc)
-    print(data)
+    onehot = np.vstack([data, onehot])
+    print(onehot)
     save("data/test/test_results/accs/" + testname + ".npy", data) 
 
 def plot():

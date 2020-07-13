@@ -133,3 +133,99 @@ Accuracy:
 Number of frames: 200
 Note: 
 
+testresults for lilly singh on 2020-07-02 13:39:08
+Accuracy: 
+   unknown_class 15.0%
+   lilly singh 85.0%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-07-02 13:47:54
+Accuracy: 
+   unknown_class 35.5%
+   lilly singh 64.0%
+   michelle obama 0.5%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-07-02 14:02:14
+Accuracy: 
+   unknown_class 30.5%
+   lilly singh 69.5%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-07-02 15:13:30
+Accuracy: 
+   lilly singh 76.92307692307693%
+   unknown_class 23.076923076923077%
+Number of frames: 130
+Note: 
+
+testresults for lilly singh on 2020-07-02 15:29:52
+Accuracy: 
+   michelle obama 1.0%
+   lilly singh 65.0%
+   malala yousafzai 0.5%
+   unknown_class 33.5%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-07-02 15:43:46
+Accuracy: 
+   michelle obama 5.0%
+   lilly singh 72.5%
+   unknown_class 22.5%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-07-02 16:12:34
+Accuracy: 
+   lilly singh 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-07-02 16:43:11
+Accuracy: 
+   lilly singh 64.5%
+   malala yousafzai 0.5%
+   michelle obama 0.5%
+   unknown_class 34.5%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-07-02 16:54:49
+Accuracy: 
+   lilly singh 70.0%
+   michelle obama 3.0%
+   unknown_class 27.0%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-07-02 18:12:24
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 184
+Note: 
+
+testresults for lilly singh on 2020-07-02 18:41:04
+Accuracy: 
+   unknown_class 17.0%
+   lilly singh 83.0%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-07-02 19:08:07
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 200
+Note: 
+
+testresults for lilly singh on 2020-07-09 21:22:49
+Accuracy: 
+   lilly singh 81.92771084337349%
+   unknown_class 18.072289156626507%
+Number of frames: 166
+Note: 
+

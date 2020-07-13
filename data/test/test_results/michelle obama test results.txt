@@ -72,3 +72,87 @@ Accuracy:
 Number of frames: 200
 Note: 
 
+testresults for michelle obama on 2020-07-02 13:40:29
+Accuracy: 
+   unknown_class 15.0%
+   michelle obama 85.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 13:48:33
+Accuracy: 
+   michelle obama 100.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 13:57:27
+Accuracy: 
+   michelle obama 100.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 15:18:34
+Accuracy: 
+   michelle obama 85.0%
+   lilly singh 0.5%
+   unknown_class 14.499999999999998%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 15:30:52
+Accuracy: 
+   michelle obama 100.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 15:42:40
+Accuracy: 
+   michelle obama 100.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 16:08:56
+Accuracy: 
+   michelle obama 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 16:29:12
+Accuracy: 
+   michelle obama 100.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 17:01:04
+Accuracy: 
+   michelle obama 100.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 18:02:02
+Accuracy: 
+   unknown_class 15.0%
+   michelle obama 85.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 18:47:26
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-02 19:27:00
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 200
+Note: 
+
+testresults for michelle obama on 2020-07-09 21:28:51
+Accuracy: 
+   unknown_class 20.0%
+   michelle obama 80.0%
+Number of frames: 200
+Note: 
+

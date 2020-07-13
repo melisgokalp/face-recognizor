@@ -66,3 +66,86 @@ Accuracy:
 Number of frames: 200
 Note: 
 
+testresults for andrew yang on 2020-07-02 13:34:39
+Accuracy: 
+   unknown_class 15.0%
+   andrew yang 85.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 13:55:18
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 14:00:50
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 15:27:46
+Accuracy: 
+   andrew yang 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 15:33:37
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 15:45:58
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 16:18:18
+Accuracy: 
+   andrew yang 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 16:39:35
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 16:51:18
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 18:23:35
+Accuracy: 
+   unknown_class 15.0%
+   andrew yang 85.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 18:58:06
+Accuracy: 
+   andrew yang 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-02 19:18:30
+Accuracy: 
+   unknown_class 100.0%
+Number of frames: 200
+Note: 
+
+testresults for andrew yang on 2020-07-09 21:16:56
+Accuracy: 
+   andrew yang 85.0%
+   unknown_class 15.0%
+Number of frames: 200
+Note: 
+
