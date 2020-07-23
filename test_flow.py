@@ -19,6 +19,7 @@ from align_faces import extract_faces, align_faces
 from dataset import FaceDataset
 from openface import load_openface, preprocess_batch
 from classifiers.binary_face_classifier import BinaryFaceClassifier, BinaryFaceNetwork
+from numpy import save, load
 
 CONF_THRESHOLD = 0.6
 CONF_TO_STORE = 30
@@ -26,7 +27,7 @@ CONF_TO_STORE = 30
 #TODO: jitter training data with gaussian noise and saturation.
 #TODO: SVM running on unknown class
 
-def capture_faces(seconds=10, sampling_duration=0.1, debug=False, imgs= 0):
+def capture_faces(seconds=10, sampling_duration=0.1, debug=False, imgs = ""):
     print("Capturing! about to capture {} seconds of video".format(seconds))
     start_time = time.time()
 
@@ -37,7 +38,7 @@ def capture_faces(seconds=10, sampling_duration=0.1, debug=False, imgs= 0):
     ctr = 1
     while time.time() - start_time < seconds:
         # ret, frame = video_capture.read()
-        for img in imgs:
+        for img in imgs[:200]:
             frame = cv2.imread(img)
             faces = extract_faces(frame)
             if len(faces) == 1:
@@ -102,7 +103,7 @@ def add_face(clf, num_classes, imgs):
     #         np.save(f_handle, Matrix)
     #     np.save("data/embeddings/{}.npy".format(name), embeddings)
     #     return retrain_classifier(clf), 0
-    if name == "skip":
+    if name == "skip" or args["test"]:
         return retrain_classifier(clf), 0
     samples = capture_faces(imgs= imgs)
     while len(samples) < 50:
@@ -191,28 +192,34 @@ def recognize(clf, num_classes, idx_to_name, imgs):
             if len(faces) == 1:
                 prev_conf.append(unknown_class_prob)
                 if np.mean(prev_conf) > CONF_THRESHOLD and len(prev_conf) == CONF_TO_STORE:
-                    (clf, idx_to_name), inc = add_face(clf, num_classes, imgs)
+                    # (clf, idx_to_name), inc = add_face(clf, num_classes, imgs)
                     print(idx_to_name)
+                    inc = 0
                     num_classes += inc
                     prev_conf.clear()
         else:
             print("No faces detected.")
         cv2.imshow('Camera Feed', frame)
         if cv2.waitKey(1) & 0xFF == ord('r'):
-            (clf, idx_to_name), inc = add_face(clf, num_classes, imgs)
+            # (clf, idx_to_name), inc = add_face(clf, num_classes, imgs)
             print(idx_to_name)
             num_classes += inc
             prev_conf.clear()
-        else: 
-            print("ERROR: no frame captured")
-    # if testing:  tmod.plot_acc(testname, test_results)
+        # else: 
+            # print("ERROR: no frame captured")
+    # tmod.plot_acc(testname, test_results)
+    # save("data/test/test_results/accs/" + testname + ".txt", test_results) 
+    # write_log(test_results, testname.split(".")[0])
+    all_results.append(test_results)
+    print(all_results)
+    # print(test_results)
     # video_capture.release()
     cv2.destroyAllWindows()
 
 def write_log(test_res, videoname):
     print("Writing test result logs")
-    file1 = open("data/test/test_results/" + testname + " test results.txt", "a+")  # append mode
-    file1.write('Test results for ' + file + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")
+    file1 = open("data/test/test_results/" +  " test_results.txt", "a+")  # append mode
+    file1.write('Test results for ' + testname + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")
     # print('\n'.join(test_res))
     # file1.write('\n'.join(test_res))
     file1.write("Accuracy: \n")
@@ -240,16 +247,10 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
     device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
     print("Using device {}".format(device))
-    openFace = load_openface(device)
+    openFace = load_openface(device) 
 
-    # samples = capture_faces()
-    # embeddings = preprocess_batch(samples)
-    # embeddings = openFace(embeddings)
-    # embeddings = embeddings.detach().numpy()
-    #
-    # # save name and embeddings
-    # np.save("data/embeddings/varun.npy", embeddings)
 
+    all_results = []
     # KEEP
     # if args["test"]:
     #     print("Starting the test...")
@@ -276,18 +277,29 @@ if __name__ == "__main__":
         files = glob.glob("data/vggf2_test/*")
         train_imgs = []
         test_imgs = []
-        for folder in files:
+
+        # Choose one random train person
+        rand = files[random.randint(0,500)]
+        train_imgs = glob.glob(rand+ "/*")[:100]
+        print("chosen rand was: " + rand)
+        for folder in files[:90]:
             imgs = glob.glob(folder+ "/*")
-            if len (imgs)>300:
-                train_imgs.append(imgs[:200]) 
-                test_imgs.append(imgs[200:300]) 
+            # if len (imgs)>300:
+            #     train_imgs.append(imgs[:200]) 
+            #     test_imgs.append(imgs[200:300]) 
+            # train_imgs.append(imgs[:200]) 
+            # test_imgs.append(imgs[200:300])
+            test_imgs.append(imgs[:50]) 
+        test_imgs.append(glob.glob("data/vgff2_test/n001838"+ "/*")[50:])
+        # test_imgs = test_imgs.flatten()
+        # print(test_imgs)
         print(len(test_imgs)) 
-        start = 0 
+        start = 0
         # trains = [x for x in files if "train" in x ]
         # devs = [x for x in files if "dev" in x ]
         # tests = [x for x in files if "testing" in x ]
         # files = []
-        mode = ""
+        mode = "Test case one vs unknowns"
         # if args["train"]:
         #     files += trains + devs
         #     mode += "Training "
@@ -295,17 +307,31 @@ if __name__ == "__main__":
         #     files += tests
         #     mode += "Testing "
         # print(files)
-        # random.shuffle(trains)
-        for i in tqdm(range(start, len(train_imgs)), total=len(train_imgs)):
-            file = train_imgs[i]
+        random.shuffle(test_imgs)
+        for i in tqdm(range(start, len(test_imgs)), total=len(test_imgs)):
+            file = test_imgs[i]
             # video_capture = cv2.VideoCapture(file)
-            testname = i
-            print(mode + str(testname) + " for file " )
+            testname = "test all"
+            print(mode + " for file " + testname)
             name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
             recognize(clf, num_classes, idx_to_name, file)
             clf, num_classes, idx_to_name = load_model()
-        print("DONE!! Mode was " + mode)
-        tmod.plot()
+            print("DONE!! Mode was " + mode)
+        # tmod.plot()
+
+    print("Writing test result logs")
+    file1 = open("data/test/test_results/" +  "ALLtest_resultss.txt", "a+")  # append mode
+    file1.write('Test results for ' + "data/vgff2_test/n001838.npy"+ datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")
+    # print('\n'.join(test_res))
+    # file1.write('\n'.join(test_res))
+    all_results = flatten(np.asarray(all_results))
+    file1.write("Accuracy: \n")
+    for name in set(all_results):
+        file1.write("   "+name + " {}%\n".format(all_results.count(name)/len(all_results)*100))
+ 
+    save("data/test/test_results/accs/" + all_test + ".npy", np.asarray(all_results)) 
+    
+
     if args["live"]:
         print("Starting video capture...")
         video_capture = cv2.VideoCapture(0)
