@@ -16,7 +16,7 @@ Plot ROC curve by plotting different cutoff values
 
 def chinese_whispers():
     print("Getting datasets")
-    known = FaceDataset("embeddings/known", n=853)
+    known = FaceDataset("data/embeddings/train", n=853)
     known_train, known_labels = known.train()
 
     dlib_arrays = []
@@ -42,7 +42,7 @@ def chinese_whispers():
 
 def euclidean_centroid_roc():
     print("Getting datasets")
-    known = FaceDataset("embeddings/test")
+    known = FaceDataset("data/embeddings/live")
     known_train, known_labels = known.all()
     known_data = []
     for i in range(1000):
