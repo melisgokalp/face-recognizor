@@ -23,14 +23,20 @@ from tabulate import tabulate
 
 namedict = {'andrew yang':0, 'barack obama':1, 'bernie sanders':2, 'joe biden':3, 'lilly singh':4, 'malala yousafzai': 5, 'michelle obama':6, 'ramy youssef':7, 'trevor noah':8, 'unknown_class':9}
 
-def accuracy(truth_labels, tested_labels):
+def accuracy_metrics(truth_labels, tested_labels):
     p_same = len(truth_labels)
-    true_accepts = truth_labels == tested_labels
-    p_diff = len(tested_labels) - len(true_accepts)
-    false_accepts= [tested_labels not in true_accepts]
-    validation_rate = true_accepts/p_same
-    false_accept_rate =  false_accepts/p_diff
-    return validation_rate, false_accept_rate
+    TP = truth_labels == tested_labels
+    FP = len(tested_labels) - len(TP)
+    TN = [tested_labels not in TP]
+    FN =  [tested_labels not in truth_labels] #we got it wrong
+
+    sensitivity = TP/(TP+FN)
+    specificity = TN/(TN+FP)
+    accuracy = (TP+TN)/(TP+TN+FP+FN)
+    precision = TP/(TP+FP)
+    negative_pred_val = TN/(TN+FN)
+    metrics = [sensitivity, specificity, accuracy, precision, negative_pred_val]
+    return metrics
 
 
 def plot_acc(testname, data, mode = "test", note = ""):
@@ -65,7 +71,7 @@ def plot():
         name = (file.split("/")[-1].replace("_", " ")).split(".")[0]
         dat_dict[name] = load(file)
     # dat_dict['x'] = np.asarray(range(len(data)))
-    print("!! dat_dict: ", dat_dict)
+    # print("!! dat_dict: ", dat_dict)
 
     # df=pd.DataFrame({'x': range(1,11), 'y1': np.random.randn(10), 'y2': np.random.randn(10)+range(1,11), 'y3': np.random.randn(10)+range(11,21) })
     # df=pd.DataFrame(dat_dict)
@@ -114,4 +120,4 @@ def plot():
 
     # return validation_rate, false_accept_rate
 
-plot()
+# plot()

@@ -1,7 +1,6 @@
 import argparse
 import time
 from collections import deque
-
 import cv2
 import numpy as np
 import torch.nn
@@ -14,8 +13,6 @@ import os
 import datetime
 import glob
 import random
-import sys
-import test_mod as tmod
 from align_faces import extract_faces, align_faces
 from dataset import FaceDataset
 from openface import load_openface, preprocess_batch
@@ -255,25 +252,7 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
     device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
     print("Using device {}".format(device))
-    openFace = load_openface(device)
-
-    # samples = capture_faces()
-    # embeddings = preprocess_batch(samples)
-    # embeddings = openFace(embeddings)
-    # embeddings = embeddings.detach().numpy()
-    #
-    # # save name and embeddings
-    # np.save("data/embeddings/varun.npy", embeddings)
-
-    # KEEP
-    # if args["test"]:
-    #     print("Starting the test...")
-    #     testfile = "data/test/test_videos/ramy_youssef/ramy_youssef1.mov"
-    #     testname = "ramy youssef"
-    #     video_capture = cv2.VideoCapture(testfile)
-    # else:
-    #     print("Starting video capture...")
-    #     video_capture = cv2.VideoCapture(0)
+    openFace = load_openface(device) 
 
     clf, num_classes, idx_to_name = load_model()
     print(idx_to_name)
@@ -303,7 +282,6 @@ if __name__ == "__main__":
         if args["test"]:
             files += tests
             mode += "Testing "
-        # print(files)
         # random.shuffle(trains)
         for i in tqdm(range(start, len(files)), total=len(files)):
             file = files[i]
@@ -319,14 +297,3 @@ if __name__ == "__main__":
         print("Starting video capture...")
         video_capture = cv2.VideoCapture(0)
         recognize(clf, num_classes, idx_to_name, args["test"])
-
-
-
-
-
-    # clf, num_classes, idx_to_name = load_model()
-    # print(idx_to_name)
-    # # cannot function as a classifier if less than 2 classes
-    # assert num_classes >= 2
-    # name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
-    # recognize(clf, num_classes, idx_to_name, args["test"])

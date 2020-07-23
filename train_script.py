@@ -1,5 +1,6 @@
 import torch
-import train_classifier
+# import dataset
+from dataset import FaceDataset
 from classifiers.mlp import Simple3MLP
 import numpy as np
 from torch.autograd import Variable
@@ -11,8 +12,8 @@ batch_size = 20
 
 model = Simple3MLP()
 CEloss = torch.nn.CrossEntropyLoss()
-faceDataset = train_classifier.FaceDataset("/home/bmo/work/cs143/aligned_embeddings", n=100)#.to_dataloader(batch_size=bsz)
-dev, test, train = train_classifier.get_dev_test_train(faceDataset)
+faceDataset = FaceDataset("/home/bmo/work/cs143/aligned_embeddings", "data/embeddings/train")#.to_dataloader(batch_size=bsz)
+dev, test, train = faceDataset.dev(), faceDataset.test(), faceDataset.train()
 train = td.DataLoader(train, batch_size=batch_size, shuffle=True)
 dev = td.DataLoader(dev, batch_size=batch_size, shuffle=True)
 test = td.DataLoader(test, batch_size=batch_size, shuffle=True)
