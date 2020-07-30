@@ -26,7 +26,7 @@ from sklearn import svm
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
+
 # roc curve and auc score
 from sklearn import preprocessing
 from sklearn.datasets import make_classification
@@ -44,44 +44,85 @@ def plot_roc_curve(fpr, tpr):
     plt.title('Receiver Operating Characteristic (ROC) Curve')
     plt.legend()
     plt.show()
-X, Y = make_classification(n_samples=2000, n_classes=2, n_features=10, random_state=0)
-
-print(X.shape)
-print(Y.shape)
 
 
-random_state = np.random.RandomState(0)
-n_samples, n_features = X.shape
-X = np.c_[X, random_state.randn(n_samples, 200 * n_features)]
 
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=.2,
-                                                    random_state=0)
+def svm_unknown_classes():
+    N_ITERS = 5
+    t = []
+    f = []
+    for _ in tqdm(range(N_ITERS), total=N_ITERS):
+        known = FaceDataset("data/embeddings/comp/test", "data/embeddings/known", n=100)
+        known_train, known_labels = known.train()
+        known_test, _ = known.test()
+        unknown = FaceDataset("data/embeddings/comp/dev",  "data/embeddings/known", n=100)
+        unknown_data, _, _ = unknown.all()
+        seed = FaceDataset("data/embeddings/comp/train",  "data/embeddings/known", n=100)
+        seed_train, seed_labels, _ = seed.all()
+        # assign our unknown class to be 0 and increment all the labels in known by 1
+        known_labels = known_labels + 1
+        seed_labels = np.zeros(len(seed_labels))
 
+        # train the SVM on the classes with the random seed
+        full_training = np.concatenate([known_train, seed_train])
+        full_labels = np.concatenate([known_labels, seed_labels])
+        clf = svm.SVC(kernel="linear", gamma="scale", C=1.6, probability=True)
+        clf.fit(full_training, full_labels)
 
-clf = svm.SVC(kernel="rbf", C=1.0, probability=True)
-ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
-data, labels, idx_to_name = ds.all()
-# Make test embeddings
-print(data.shape)
-print(labels.shape)
-probas_ = clf.fit(data[:1000], labels[:1000]).predict_proba(data[1000:])
-print(clf)
-labels = preprocessing.label_binarize(labels, classes=list(range(0,128)))
-fpr, tpr, thresholds = roc_curve( labels[1000:], probas_[:, 1])
-roc_auc = auc(fpr, tpr)
-# print "Area under the ROC curve : %f" % roc_aucize=.2, random_state=0
-# Plot ROC curve
-pl.clf()
-pl.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
-pl.plot([0, 1], [0, 1], 'k--')
-pl.xlim([0.0, 1.0])
-pl.ylim([0.0, 1.0])
-pl.xlabel('False Positive Rate')
-pl.ylabel('True Positive Rate')
-pl.title('Receiverrating characteristic example')
-pl.legend(loc="lower right")
+        # run SVM on the unknown set
+        unknown_probs = clf.predict_proba(unknown_data)
+        pred = np.argmax(unknown_probs, axis=1)
+        unknown_confs = np.max(unknown_probs, axis=1)
+        unknown_confs[pred == 0] = 0
 
-pl.show()
+        # run SVM on known set
+        known_probs = clf.predict_proba(known_test)
+        pred = np.argmax(known_probs, axis=1)
+        known_confs = np.max(known_probs, axis=1)
+        known_confs[pred == 0] = 0
+
+        # TPR = rate of unknown faces correctly qualified as so
+        # FPR = rate of known faces being qualified as unknown faces
+        TPRs = []
+        FPRs = []
+        thresholds = np.linspace(0, 1, 1000)
+        for x in thresholds:
+            TPR = np.mean(unknown_confs < x)
+            FPR = np.mean(known_confs < x)
+            TPRs.append(TPR)
+            FPRs.append(FPR)
+
+        t.append(TPRs)
+        f.append(FPRs)
+
+    t = np.mean(t, axis=0)
+    f = np.mean(f, axis=0)
+    np.save("svm_tpr1.npy", t)
+    np.save("svm_fpr1.npy", f)
+    # roc_auc = auc(FPRs, TPRs)
+    plot_roc_curve(f, t)
+    print(t.shape)
+    print(f.shape)
+    
+# t = np.load("svm_tpr.npy")
+# f= np.load("svm_fpr.npy")
+# plot_roc_curve(t, f)
+
+# clf = svm.SVC(kernel="rbf", C=1.0, probability=True)
+# ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
+# data, labels, idx_to_name = ds.all()
+# # Make test embeddings
+# print(data.shape)
+# print(labels.shape)
+# probas_ = clf.fit(data[:1000], labels[:1000])
+# # predict classes for all faces and label them if greater than threshold
+# probs = clf.predict_proba(data)
+# unknown_class_prob = probs[0][-1]
+# print(probs.shape)
+# predictions = np.argmax(probs, axis=1)
+# probs = np.max(probs, axis=1)
+# print(predictions)
+ 
 
 def accuracy_metrics(truth_labels, tested_labels):
     # np.save("data/test/test_results/accs/" + "tested_labels" + ".npy", np.asarray(tested_labels)) 
@@ -209,3 +250,5 @@ def plot():
 
     # return validation_rate, false_accept_rate
 # accuracy_metrics("","")
+
+svm_unknown_classes()
