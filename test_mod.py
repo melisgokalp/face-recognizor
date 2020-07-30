@@ -20,49 +20,138 @@ import pandas as pd
 from numpy import save, load
 import os.path
 from tabulate import tabulate
+from dataset import FaceDataset
+from sklearn import svm
 
-namedict = {'andrew yang':0, 'barack obama':1, 'bernie sanders':2, 'joe biden':3, 'lilly singh':4, 'malala yousafzai': 5, 'michelle obama':6, 'ramy youssef':7, 'trevor noah':8, 'unknown_class':9}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+# roc curve and auc score
+from sklearn import preprocessing
+from sklearn.datasets import make_classification
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_auc_score
+
+def plot_roc_curve(fpr, tpr):
+    plt.plot(fpr, tpr, color='orange', label='ROC')
+    plt.plot([0, 1], [0, 1], color='darkblue', linestyle='--')
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic (ROC) Curve')
+    plt.legend()
+    plt.show()
+X, Y = make_classification(n_samples=2000, n_classes=2, n_features=10, random_state=0)
+
+print(X.shape)
+print(Y.shape)
+
+
+random_state = np.random.RandomState(0)
+n_samples, n_features = X.shape
+X = np.c_[X, random_state.randn(n_samples, 200 * n_features)]
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=.2,
+                                                    random_state=0)
+
+
+clf = svm.SVC(kernel="rbf", C=1.0, probability=True)
+ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
+data, labels, idx_to_name = ds.all()
+# Make test embeddings
+print(data.shape)
+print(labels.shape)
+probas_ = clf.fit(data[:1000], labels[:1000]).predict_proba(data[1000:])
+print(clf)
+labels = preprocessing.label_binarize(labels, classes=list(range(0,128)))
+fpr, tpr, thresholds = roc_curve( labels[1000:], probas_[:, 1])
+roc_auc = auc(fpr, tpr)
+# print "Area under the ROC curve : %f" % roc_aucize=.2, random_state=0
+# Plot ROC curve
+pl.clf()
+pl.plot(fpr, tpr, label='ROC curve (area = %0.2f)' % roc_auc)
+pl.plot([0, 1], [0, 1], 'k--')
+pl.xlim([0.0, 1.0])
+pl.ylim([0.0, 1.0])
+pl.xlabel('False Positive Rate')
+pl.ylabel('True Positive Rate')
+pl.title('Receiverrating characteristic example')
+pl.legend(loc="lower right")
+
+pl.show()
 
 def accuracy_metrics(truth_labels, tested_labels):
-    p_same = len(truth_labels)
-    TP = truth_labels == tested_labels
-    FP = len(tested_labels) - len(TP)
-    TN = [tested_labels not in TP]
-    FN =  [tested_labels not in truth_labels] #we got it wrong
+    # np.save("data/test/test_results/accs/" + "tested_labels" + ".npy", np.asarray(tested_labels)) 
+    # np.save("data/test/test_results/accs/" + "truth_labels" + ".npy", np.asarray(truth_labels)) 
+    # print(len(truth_labels))
+    # print(len(tested_labels[1]))
+    truth_labels= np.load("data/test/test_results/accs/" + "truth_labels" + ".npy") 
+    tested_labels= np.load("data/test/test_results/accs/" + "tested_labels" + ".npy")[1]
+
+    for i in range(len(truth_labels)):
+        name = truth_labels[i].split("/")[-2]
+        truth_labels[i] = name
+
+    res =  [x==y for x, y in zip(tested_labels, truth_labels)]
+
+    test_elements = list(set(tested_labels))
+    for e in test_elements:
+        if e[:2] == "n0":
+            test_subject = e
+    # print(sum(match))
+    # p_same = len(truth_labels)
+    TP = res.count(True)
+    FP = max(0,tested_labels.count(test_subject) - list(truth_labels).count(test_subject))
+    test_not_test_subject = len(tested_labels) - tested_labels.count(test_subject)
+    truth_not_test_subject = len(truth_labels) - list(truth_labels).count(test_subject)
+    FN = test_not_test_subject - truth_not_test_subject #we got it wrong
+    TN = res.count(False) - FN
 
     sensitivity = TP/(TP+FN)
     specificity = TN/(TN+FP)
     accuracy = (TP+TN)/(TP+TN+FP+FN)
+    recall = TP/(TP+FN)
     precision = TP/(TP+FP)
     negative_pred_val = TN/(TN+FN)
-    metrics = [sensitivity, specificity, accuracy, precision, negative_pred_val]
+
+    f_score = (2 * recall * precision) / (recall + precision)
+    metrics = [sensitivity, specificity, accuracy, precision, negative_pred_val, f_score]
+    # print(metrics)
+    # plot_roc_curve(FP/, precisio)
     return metrics
 
 
-def plot_acc(testname, data, mode = "test", note = ""):
-    file1 = open("data/test/test_results/" + testname + " test results.txt", "a+")  # append mode
-    file1.write(mode + 'results for ' + testname + datetime.datetime.now().strftime(" on %Y-%m-%d %H:%M:%S") +"\n")
-    file1.write("Accuracy: \n")
-    onehot = np.zeros((10,1))
-    for name in set(data):
-        acc = data.count(name)/len(data)*100
-        file1.write("   "+name + " {}%\n".format(acc))
-        onehot[namedict[name]] = acc
+def plot_acc(data, mode = "test", note = ""):
+    # We save names of all the embeddings
+    # live_embeddings = glob.glob('data/embeddings/live/*.npy')
+    # all_names = []
+    # for embedding in live_embeddings:
+    #     name = embedding.split("/")[-1]
+    #     name = name.split(".")[0]
+    #     all_names.append(name)
+    # all_names.append("unknown")
+    # all_names.append("no detection")
+    # print(all_names)
+    # onehot = np.zeros((len(all_names),1))
+    # for name in data:
+    #     onehot[all_names.index(name)] = 1
 
-    file1.write("Number of frames: {}\n".format(len(data))) 
-    file1.write("Note: "+ note+"\n\n") 
-    test_res_l = max(len(data), 1)
-    print("Accuracy is {}%".format(data.count(testname)/test_res_l*100))
-    file1.close()
-    # Save result
-    potfile = "data/test/test_results/accs/" + testname + ".npy"
-    files = glob.glob('data/embeddings/live/*.npy')
+    onehot = np.asarray(data)
+    print(data)
+    for name in data:
+        onehot[all_names.index(name)] = 1
+
+    file_name = "result_data"
+    result_data = "data/test/test_results/accs/" + file_name + ".npy"
     data = np.asarray([])
-    if os.path.isfile(potfile):
-        data = load("data/test/test_results/accs/" + testname + ".npy")
+    if os.path.isfile(result_data):
+        data = load(result_data)
     onehot = np.vstack([data, onehot])
     print(onehot)
-    save("data/test/test_results/accs/" + testname + ".npy", data) 
+    save(result_data, data)
 
 def plot():
 
@@ -119,5 +208,4 @@ def plot():
 
 
     # return validation_rate, false_accept_rate
-
-# plot()
+# accuracy_metrics("","")

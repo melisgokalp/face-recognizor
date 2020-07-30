@@ -1,5 +1,5 @@
 import argparse
-import time
+import os, time, datetime
 from collections import deque
 import cv2
 import numpy as np
@@ -10,8 +10,6 @@ from sklearn import svm
 from tqdm import tqdm
 from PIL import Image
 import test_mod as tmod
-import os
-import datetime
 import glob
 import random
 from align_faces import extract_faces, align_faces
@@ -241,8 +239,11 @@ def write_log(test_res, videoname):
 
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser()
+    try:
+        parser = argparse.ArgumentParser()
+    except:
+        parser.print_help()
+        sys.exit(0)    
     parser.add_argument("--gpu", action="store_true", help="run with this flag to run on a GPU")
     parser.add_argument("--train", action="store_true", help="run with this flag to train and dev the model") 
     parser.add_argument("--test", action="store_true", help="run with this flag to test the model") 
