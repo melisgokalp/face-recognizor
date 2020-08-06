@@ -1,5 +1,5 @@
 import argparse
-import time
+# import time
 from collections import deque
 
 import cv2
@@ -15,15 +15,11 @@ import os
 import datetime
 
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 from numpy import save, load
-import os.path
 from tabulate import tabulate
 from dataset import FaceDataset
-from sklearn import svm
 
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -138,7 +134,7 @@ def svm_unknown_classes():
 # predictions = np.argmax(probs, axis=1)
 # probs = np.max(probs, axis=1)
 # print(predictions)
- 
+
 
 def accuracy_metrics(truth_labels, tested_labels):
     # np.save("data/test/test_results/accs/" + "tested_labels" + ".npy", np.asarray(tested_labels)) 
