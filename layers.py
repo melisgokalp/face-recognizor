@@ -5,8 +5,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-from torch.legacy.nn import Module
-from torch.legacy.nn.utils import clear
+# from torch.legacy.nn import Module
+# from torch.legacy.nn.utils import clear
+from legacy.nn import Module
+from legacy.nn.utils import clear
 
 
 class LambdaBase(nn.Sequential):
