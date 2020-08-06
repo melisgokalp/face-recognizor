@@ -55,7 +55,8 @@ def generate_embeddings(model, data_folder, n=None, dlib=False, max_per_class=50
                 img_paths = glob.glob(files)[:max_per_class]
                 embeddings = []
                 for img_path in img_paths:
-                    img = face_recognition.load_image_file(img_path)
+                    # img = face_recognition.load_image_file(img_path)
+                    img = cv2.imread(img_path)
                     dlib_embedding = face_recognition.face_encodings(img)
                     if len(dlib_embedding)>0:
                         dlib_embedding = face_recognition.face_encodings(img)[0]
