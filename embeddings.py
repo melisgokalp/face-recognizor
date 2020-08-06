@@ -17,6 +17,7 @@ from tqdm import tqdm
 
 import openface
 from align_faces import align_and_extract_faces
+import face_recognition
 
 # important information
 dabs = 8
@@ -37,7 +38,7 @@ def crop_faces(f):
     return img
 
 
-def generate_embeddings(model, data_folder, n=None, max_per_class=50):
+def generate_embeddings(model, data_folder, n=None, dlib=False, max_per_class=50):
     generated = 0
     start = time.time()
 
@@ -48,25 +49,35 @@ def generate_embeddings(model, data_folder, n=None, max_per_class=50):
     for person in tqdm(people):
         try:
             id = os.path.basename(person)
-            if not os.path.exists(os.path.join("embeddings/known", "{}.npy".format(id))):
+            if not os.path.exists(os.path.join("data/embeddings/dlibknown1", "{}.npy".format(id))):
                 files = os.path.join(person, "*.jpg")
                 imgs = []
                 img_paths = glob.glob(files)[:max_per_class]
-                for img_path in img_paths[:10000]:
-                    img = crop_faces(img_path)
-                    if img is not None:
-                        imgs.append(img)
-                input = np.asarray(imgs)
-                generated += len(input)
-                input = openface.preprocess_batch(input)
-                embeddings = model(input)
-                embeddings = embeddings.detach().numpy()
-                np.save(os.path.join("embeddings/known", "{}.npy".format(id)), embeddings)
-        except:
+                embeddings = []
+                for img_path in img_paths:
+                    img = face_recognition.load_image_file(img_path)
+                    dlib_embedding = face_recognition.face_encodings(img)
+                    if len(dlib_embedding)>0:
+                        dlib_embedding = face_recognition.face_encodings(img)[0]
+                    # if len(dlib_embedding) < 0:
+                    #     print(len(dlib_embedding))
+                        embeddings.append(dlib_embedding)
+                    # print(dlib_embedding)
+                #     img = crop_faces(img_path)
+                #     if img is not None:
+                #         imgs.append(img)
+                # input = np.asarray(imgs)
+                # generated += len(input)
+                # input = openface.preprocess_batch(input)
+                # embeddings = model(input)
+                # embeddings = embeddings.detach().numpy()
+                np.save(os.path.join("data/embeddings/dlibknown1", "{}.npy".format(id)), np.asarray(embeddings))
+        except Exception as e:
+            print(e)
             pass
 
     end = time.time()
-    print("Generated {} embeddings with an average time of {}s".format(generated, (end - start) / generated))
+    # print("Generated {} embeddings with an average time of {}s".format(generated, (end - start) / generated))
 
 
 if __name__ == '__main__':

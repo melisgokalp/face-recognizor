@@ -35,10 +35,20 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_curve
 from sklearn.metrics import roc_auc_score
+from sklearn.metrics import auc
 
-def plot_roc_curve(fpr, tpr):
-    plt.plot(fpr, tpr, color='orange', label='ROC')
+
+def plot_roc_curve(fpr, tpr, fpr1=None,tpr1= None):
+    dauc = auc(fpr, tpr)
+    print("auc is " + str(dauc))
+    plt.plot(fpr, tpr, color='orange', label='Dlib AUC=' + str(dauc))
+
+    dauc = auc(fpr1, tpr1)
+    print("auc is " + str(dauc))
+    plt.plot(fpr1, tpr1, color='blue', label='OpenFace AUC=' + str(dauc))
+
     plt.plot([0, 1], [0, 1], color='darkblue', linestyle='--')
+
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic (ROC) Curve')
@@ -48,16 +58,18 @@ def plot_roc_curve(fpr, tpr):
 
 
 def svm_unknown_classes():
-    N_ITERS = 5
+    N_ITERS = 10
     t = []
     f = []
+    mode = "comp"
+    mode1 = "dlibcomp"
     for _ in tqdm(range(N_ITERS), total=N_ITERS):
-        known = FaceDataset("data/embeddings/comp/test", "data/embeddings/known", n=100)
+        known = FaceDataset("data/embeddings/"+mode+"/test", "data/embeddings/"+mode+"/test", n=100)
         known_train, known_labels = known.train()
         known_test, _ = known.test()
-        unknown = FaceDataset("data/embeddings/comp/dev",  "data/embeddings/known", n=100)
+        unknown = FaceDataset("data/embeddings/"+mode+"/dev",  "data/embeddings/"+mode+"/dev", n=100)
         unknown_data, _, _ = unknown.all()
-        seed = FaceDataset("data/embeddings/comp/train",  "data/embeddings/known", n=100)
+        seed = FaceDataset("data/embeddings/"+mode+"/train",  "data/embeddings/"+mode+"/train", n=100)
         seed_train, seed_labels, _ = seed.all()
         # assign our unknown class to be 0 and increment all the labels in known by 1
         known_labels = known_labels + 1
@@ -66,7 +78,7 @@ def svm_unknown_classes():
         # train the SVM on the classes with the random seed
         full_training = np.concatenate([known_train, seed_train])
         full_labels = np.concatenate([known_labels, seed_labels])
-        clf = svm.SVC(kernel="linear", gamma="scale", C=1.6, probability=True)
+        clf = svm.SVC(kernel="rbf", gamma="scale", C=1.0, probability=True)
         clf.fit(full_training, full_labels)
 
         # run SVM on the unknown set
@@ -97,16 +109,20 @@ def svm_unknown_classes():
 
     t = np.mean(t, axis=0)
     f = np.mean(f, axis=0)
-    np.save("svm_tpr1.npy", t)
-    np.save("svm_fpr1.npy", f)
+    np.save(mode + "_10iter" + "_tpr.npy", t)
+    np.save(mode + "_10iter" + "_fpr.npy", f)
     # roc_auc = auc(FPRs, TPRs)
-    plot_roc_curve(f, t)
+    # plot_roc_curve(f, t)
     print(t.shape)
     print(f.shape)
     
-# t = np.load("svm_tpr.npy")
-# f= np.load("svm_fpr.npy")
-# plot_roc_curve(t, f)
+# mode = "comp"
+# mode1 = "dlibcomp"
+# t = np.load(mode1 + "_10iter" + "_tpr.npy")
+# f= np.load(mode1 + "_10iter" + "_fpr.npy")
+# t1 = np.load(mode + "_10iter" + "_tpr.npy")
+# f1= np.load(mode + "_10iter" + "_fpr.npy")
+# plot_roc_curve(f, t,f1,t1)
 
 # clf = svm.SVC(kernel="rbf", C=1.0, probability=True)
 # ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
@@ -160,7 +176,7 @@ def accuracy_metrics(truth_labels, tested_labels):
 
     f_score = (2 * recall * precision) / (recall + precision)
     metrics = [sensitivity, specificity, accuracy, precision, negative_pred_val, f_score]
-    # print(metrics)
+    print(metrics)
     # plot_roc_curve(FP/, precisio)
     return metrics
 
@@ -249,6 +265,6 @@ def plot():
 
 
     # return validation_rate, false_accept_rate
-# accuracy_metrics("","")
+accuracy_metrics("","")
 
-svm_unknown_classes()
+# svm_unknown_classes()
