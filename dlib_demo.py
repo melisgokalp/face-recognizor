@@ -24,7 +24,7 @@ known_face_encodings = [
 known_face_names = [
     "Barack Obama",
     "Joe Biden",
-    "Melis"
+    "melis"
 ]
 
 # Initialize some variables

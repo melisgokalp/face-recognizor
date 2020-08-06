@@ -115,6 +115,11 @@ def add_face(clf, num_classes):
         increment = 0
     # save name and embeddings
     np.save(live_embeddings_loc + "/{}.npy".format(name), embeddings)
+
+    ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
+    data, labels, idx_to_name = ds.all()
+    # print(data)
+    known_face_encodings = data
     return retrain_classifier(clf), increment
 
 def update_embedding(live_embeddings_loc, embeddings, name):
@@ -156,14 +161,10 @@ def recognize(clf, num_classes, idx_to_name, testing):
 
     ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
     data, labels, idx_to_name = ds.all()
-    print(data)
-    known_face_encodings = [
-        obama_face_encoding,
-        biden_face_encoding,
-        melis_face_encoding
-    ]
-
+    # print(data)
+    known_face_encodings = data
     # Initialize some variables
+    known_face_names = idx_to_name.keys()
     face_locations = []
     face_encodings = []
     names = []
@@ -187,10 +188,10 @@ def recognize(clf, num_classes, idx_to_name, testing):
                     matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
                     name = "Unknown"
 
-                    # # If a match was found in known_face_encodings, just use the first one.
-                    # if True in matches:
-                    #     first_match_index = matches.index(True)
-                    #     name = known_names[first_match_index]
+                    # If a match was found in known_face_encodings, just use the first one.
+                    if True in matches:
+                        first_match_index = matches.index(True)
+                        name = known_names[first_match_index]
 
                     # Or instead, use the known face with the smallest distance to the new face
                     face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
@@ -217,6 +218,7 @@ def recognize(clf, num_classes, idx_to_name, testing):
                 cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
                 font = cv2.FONT_HERSHEY_DUPLEX
                 cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+                if testing: test_results.append(names[i]) 
 
             # if len(rects) > 0:
 
@@ -231,24 +233,25 @@ def recognize(clf, num_classes, idx_to_name, testing):
             #     # embeddings = openFace(tensor)
 
                 embeddings =face_encodings
-
-                # predict classes for all faces and label them if greater than threshold
-                probs = clf.predict_proba(embeddings)
-                unknown_class_prob = probs[0][-1]
-                # print(probs)
-                predictions = np.argmax(probs, axis=1)
-                probs = np.max(probs, axis=1)
-                names = [idx_to_name[idx] for idx in predictions]
-                # replace all faces below confidence w unknown
-                names = [names[i] if probs[i] > CONF_THRESHOLD else "unknown_class" for i in range(len(probs))]
+                rects = face_locations
+                # # predict classes for all faces and label them if greater than threshold
+                # probs = clf.predict_proba(embeddings)
+                unknown_class_prob = 0.8#probs[0][-1]
+                # # print(probs)
+                # predictions = np.argmax(probs, axis=1)
+                # probs = np.max(probs, axis=1)
+                # names = [idx_to_name[idx] for idx in predictions]
+                # # replace all faces below confidence w unknown
+                # names = [names[i] if probs[i] > CONF_THRESHOLD else "unknown_class" for i in range(len(probs))]
                 # print("Hi {}!".format(names))
-                for i in range(len(names)):
-                    x, y, w, h = face_utils.rect_to_bb(rects[i])
-                    cv2.putText(frame, names[i], (x, y), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 255, 0), 2)
-                    if testing: test_results.append(names[i]) 
+                # for i in range(len(names)):
+                #     print(rects[i])
+                #     x, y, w, h = face_utils.rect_to_bb(rects[i])
+                #     cv2.putText(frame, names[i], (x, y), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 255, 0), 2)
+                #     if testing: test_results.append(names[i]) 
                 # determine if we need to trigger retraining
                 # we only retrain if there is one person in the frame and they are unrecognized or there are 0 classes
-                if len(faces) == 1:
+                if len(face_encodings) == 1:
                     prev_conf.append(unknown_class_prob)
                     if np.mean(prev_conf) > CONF_THRESHOLD and len(prev_conf) == CONF_TO_STORE:
                         (clf, idx_to_name), inc = add_face(clf, num_classes)
@@ -314,8 +317,9 @@ if __name__ == "__main__":
     device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
     print("Using device {}".format(device))
     openFace = load_openface(device) 
-
+    testname = ''
     clf, num_classes, idx_to_name = load_model()
+    name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
     print(idx_to_name)
     # cannot function as a classifier if less than 2 classes
     assert num_classes >= 2
@@ -349,7 +353,6 @@ if __name__ == "__main__":
             video_capture = cv2.VideoCapture(file)
             testname = file.split("/")[-2].replace("_", " ")
             print(mode + testname + " for file " + file)
-            name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
             recognize(clf, num_classes, idx_to_name, True)
             clf, num_classes, idx_to_name = load_model()
         print("DONE!! Mode was " + mode)

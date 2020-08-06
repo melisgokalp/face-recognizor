@@ -325,6 +325,7 @@ if __name__ == "__main__":
         # tmod.plot()
         if args["train"]:
             print("NOW STARTING TRAIN MODE")
+            print(train_imgs[0])
             testname = train_imgs[0].split("/")[-2]
             train_results = recognize(clf, num_classes, idx_to_name, train_imgs, test_flag = False)
             print(train_results)
