@@ -142,7 +142,7 @@ def accuracy_metrics(truth_labels, tested_labels):
     # print(len(truth_labels))
     # print(len(tested_labels[1]))
     truth_labels= np.load("data/test/test_results/accs/" + "truth_labels" + ".npy") 
-    tested_labels= np.load("data/test/test_results/accs/" + "tested_labels" + ".npy")[1]
+    tested_labels= np.load("data/test/test_results/accs/" + "tested_labels" + ".npy",allow_pickle=True)[1]
 
     for i in range(len(truth_labels)):
         name = truth_labels[i].split("/")[-2]
