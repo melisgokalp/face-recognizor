@@ -16,6 +16,7 @@ from align_faces import extract_faces, align_faces
 from dataset import FaceDataset
 from openface import load_openface, preprocess_batch
 from classifiers.binary_face_classifier import BinaryFaceClassifier, BinaryFaceNetwork
+import face_recognition
 
 CONF_THRESHOLD = 0.6
 CONF_TO_STORE = 30
@@ -152,26 +153,84 @@ def recognize(clf, num_classes, idx_to_name, testing):
         # video_capture = cv2.VideoCapture(0)
     CONF_THRESHOLD += 0.2/num_classes
     print(CONF_THRESHOLD)
+
+    ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
+    data, labels, idx_to_name = ds.all()
+    print(data)
+    known_face_encodings = [
+        obama_face_encoding,
+        biden_face_encoding,
+        melis_face_encoding
+    ]
+
+    # Initialize some variables
+    face_locations = []
+    face_encodings = []
+    names = []
+    process_this_frame = True
     while True and f_count<= 200:
         # ret is error code but we don't care about it
         ret, frame = video_capture.read()
         if ret:
             # extract and align faces
-            if testing: f_count += 1
-            rects = extract_faces(frame)
-            # print(frame)
-            if len(rects) > 0:
+            small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
+            rgb_small_frame = small_frame[:, :, ::-1]
 
-                # draw all bounding boxes for faces
-                for i in range(len(rects)):
-                    x, y, w, h = face_utils.rect_to_bb(rects[i])
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+            if process_this_frame:
+                # Find all the faces and face encodings in the current frame of video
+                face_locations = face_recognition.face_locations(rgb_small_frame)
+                face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
 
-                # generate embeddings
-                faces = align_faces(frame, rects)
-                tensor = preprocess_batch(faces)
-                embeddings = openFace(tensor)
-                embeddings = embeddings.detach().numpy()
+                names = []
+                for face_encoding in face_encodings:
+                    # See if the face is a match for the known face(s)
+                    matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+                    name = "Unknown"
+
+                    # # If a match was found in known_face_encodings, just use the first one.
+                    # if True in matches:
+                    #     first_match_index = matches.index(True)
+                    #     name = known_names[first_match_index]
+
+                    # Or instead, use the known face with the smallest distance to the new face
+                    face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+                    best_match_index = np.argmin(face_distances)
+                    if matches[best_match_index]:
+                        name = known_names[best_match_index]
+
+                    names.append(name)
+
+            process_this_frame = not process_this_frame
+
+            # Display the results
+            for (top, right, bottom, left), name in zip(face_locations, names):
+                # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+                top *= 4
+                right *= 4
+                bottom *= 4
+                left *= 4
+
+                # Draw a box around the face
+                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+
+                # Draw a label with a name below the face
+                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+                font = cv2.FONT_HERSHEY_DUPLEX
+                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+
+            # if len(rects) > 0:
+
+            #     # draw all bounding boxes for faces
+            #     for i in range(len(rects)):
+            #         x, y, w, h = face_utils.rect_to_bb(rects[i])
+            #         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+
+            #     # generate embeddings
+            #     faces = align_faces(frame, rects)
+            #     tensor = preprocess_batch(faces)
+            #     # embeddings = openFace(tensor)
+
+                embeddings =face_encodings
 
                 # predict classes for all faces and label them if greater than threshold
                 probs = clf.predict_proba(embeddings)
