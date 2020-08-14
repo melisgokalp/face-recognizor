@@ -293,7 +293,7 @@ if __name__ == "__main__":
     device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
     print("Using device {}".format(device))
     if args["svm_train"]:
-        svm_unknown_classes(args["svm_train"],args["iter"])
+        svm_unknown_classes(args["svm_train"], int(args["iter"]))
         accuracy_metrics("","")
     if args["plot"]:
-        plot_roc_curve(mode = args["svm_train"], N_ITERS = args["iter"])
+        plot_roc_curve(mode = args["svm_train"], N_ITERS = int(args["iter"]))
