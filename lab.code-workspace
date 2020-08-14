@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "../cs1660"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true
+	}
+}
