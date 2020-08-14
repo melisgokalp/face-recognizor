@@ -57,16 +57,16 @@ def capture_faces(seconds=20, sampling_duration=0.1, debug=False):
     print("Extracting faces from samples\n")
     samples = []
     for i in tqdm(range(len(face_locs)), total=len(face_locs)):
-        rect = face_locs[i]
-        frame = frames[i]
-        sample = align_faces(frame, [rect])[0]
+        # rect = face_locs[i]
+        # frame = frames[i]
+        # sample = align_faces(frame, [rect])[0]
+        sample = frame
         samples.append(sample)
         data_aug = augment_data(sample)
         samples.extend(data_aug)
         if debug:
             cv2.imshow("samples", sample)
             cv2.waitKey(0)
-
     return samples
 
 # for data augmentation — adjusts hue and saturation
@@ -85,6 +85,13 @@ def retrain_classifier(clf):
     # print(ds.test())
     return clf, idx_to_name
 
+def sample_encode(samples):
+    embeddings = []
+    for sample in samples:
+        encoding = face_recognition.face_encodings(sample)
+        if len(encoding) >0:
+            embeddings.append(encoding[0])
+    return embeddings
 
 def add_face(clf, num_classes):
     name = testname
@@ -99,15 +106,17 @@ def add_face(clf, num_classes):
     #         np.save(f_handle, Matrix)
     #     np.save("data/embeddings/{}.npy".format(name), embeddings)
     #     return retrain_classifier(clf), 0
+    embeddings = []
     if name == "skip":
         return retrain_classifier(clf), 0
     samples = capture_faces()
-    while len(samples) < 50:
+    while len(samples) < 20:
         print("We could not capture sufficient samples. Please try again.\n")
         samples = capture_faces()
-    embeddings = preprocess_batch(samples)
-    embeddings = openFace(embeddings)
-    embeddings = embeddings.detach().numpy()
+    # embeddings = preprocess_batch(samples)
+    # embeddings = openFace(embeddings)
+    # embeddings = embeddings.detach().numpy()
+    embeddings = np.asarray(sample_encode(samples))
 
     if name in name_to_idx:
         print("Face exists, append to embeddings!\n")
@@ -115,11 +124,7 @@ def add_face(clf, num_classes):
         increment = 0
     # save name and embeddings
     np.save(live_embeddings_loc + "/{}.npy".format(name), embeddings)
-
-    ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
-    data, labels, idx_to_name = ds.all()
-    # print(data)
-    known_face_encodings = data
+    
     return retrain_classifier(clf), increment
 
 def update_embedding(live_embeddings_loc, embeddings, name):
@@ -132,7 +137,7 @@ def update_embedding(live_embeddings_loc, embeddings, name):
 
 def load_model():
     # TODO: in the future we should look at model persistence to disk
-    clf = svm.SVC(kernel="rbf", C=1.0, probability=True)
+    clf = svm.SVC(kernel="linear", gamma='auto', C=1.0, probability=True)
     #network = BinaryFaceNetwork(device)
     #network.load_state_dict(torch.load("data/binary_face_classifier.pt", map_location=device))
     #clf = BinaryFaceClassifier(network, 0.5)
@@ -153,16 +158,10 @@ def recognize(clf, num_classes, idx_to_name, testing):
         # video_capture = cv2.VideoCapture("test_faces/test_videos/lily_singh1.mov")
         # frame_array = []
         test_results = []
-    else:
-        print("Starting video capture...")
-        # video_capture = cv2.VideoCapture(0)
+
     CONF_THRESHOLD += 0.2/num_classes
     print(CONF_THRESHOLD)
 
-    ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
-    data, labels, idx_to_name = ds.all()
-    # print(data)
-    known_face_encodings = data
     # Initialize some variables
     known_face_names = idx_to_name.keys()
     face_locations = []
@@ -182,61 +181,91 @@ def recognize(clf, num_classes, idx_to_name, testing):
                 face_locations = face_recognition.face_locations(rgb_small_frame)
                 face_encodings = face_recognition.face_encodings(rgb_small_frame, face_locations)
 
-                names = []
-                for face_encoding in face_encodings:
-                    # See if the face is a match for the known face(s)
-                    matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-                    name = "Unknown"
+                # names = []
+                # for face_encoding in face_encodings:
+                #     # See if the face is a match for the known face(s)
+                #     matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+                #     name = "Unknown"
+                #     name = clf.predict([test_image_enc])
 
-                    # If a match was found in known_face_encodings, just use the first one.
-                    if True in matches:
-                        first_match_index = matches.index(True)
-                        name = known_names[first_match_index]
+                #     # If a match was found in known_face_encodings, just use the first one.
+                #     # if True in matches:
+                #     #     first_match_index = matches.index(True)
+                #     #     name = known_names[first_match_index]
 
-                    # Or instead, use the known face with the smallest distance to the new face
-                    face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-                    best_match_index = np.argmin(face_distances)
-                    if matches[best_match_index]:
-                        name = known_names[best_match_index]
+                #     # Or instead, use the known face with the smallest distance to the new face
+                #     face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+                #     best_match_index = np.argmin(face_distances)
+                #     if matches[best_match_index]:
+                #         name = known_names[best_match_index]
 
-                    names.append(name)
+                #     names.append(name)
 
-            process_this_frame = not process_this_frame
+            if len(face_encodings) > 0:
+                process_this_frame = not process_this_frame
+                face_encodings = np.asarray(face_encodings)
+                print(face_encodings.shape)
+                probs = clf.predict_proba(face_encodings)
+                unknown_class_prob = probs[0][-1]
+                # print(probs)
+                predictions = np.argmax(probs, axis=1)
+                probs = np.max(probs, axis=1)
+                names = [idx_to_name[idx] for idx in predictions]
+                # replace all faces below confidence w unknown
+                names = [names[i] if probs[i] > CONF_THRESHOLD else "unknown_class" for i in range(len(probs))]
+                # print("Hi {}!".format(names))
+                # for i in range(len(names)):
+                #     x, y, w, h = face_utils.rect_to_bb(rects[i])
+                #     cv2.putText(frame, names[i], (x, y), cv2.FONT_HERSHEY_PLAIN, 1.5, (0, 255, 0), 2)
+                #     if testing: test_results.append(names[i]) 
 
-            # Display the results
-            for (top, right, bottom, left), name in zip(face_locations, names):
-                # Scale back up face locations since the frame we detected in was scaled to 1/4 size
-                top *= 4
-                right *= 4
-                bottom *= 4
-                left *= 4
 
-                # Draw a box around the face
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+                # Display the results
+                for (top, right, bottom, left), name in zip(face_locations, names):
+                    # Scale back up face locations since the frame we detected in was scaled to 1/4 size
+                    top *= 4
+                    right *= 4
+                    bottom *= 4
+                    left *= 4
 
-                # Draw a label with a name below the face
-                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
-                font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
-                if testing: test_results.append(names[i]) 
+                    # Draw a box around the face
+                    cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
-            # if len(rects) > 0:
+                    # Draw a label with a name below the face
+                    cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+                    font = cv2.FONT_HERSHEY_DUPLEX
+                    cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+                    if testing: test_results.append(names[i]) 
 
-            #     # draw all bounding boxes for faces
-            #     for i in range(len(rects)):
-            #         x, y, w, h = face_utils.rect_to_bb(rects[i])
-            #         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                # if len(rects) > 0:
+                cv2.imshow('Camera Feed', frame)
+                #     # draw all bounding boxes for faces
+                #     for i in range(len(rects)):
+                #         x, y, w, h = face_utils.rect_to_bb(rects[i])
+                #         cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-            #     # generate embeddings
-            #     faces = align_faces(frame, rects)
-            #     tensor = preprocess_batch(faces)
-            #     # embeddings = openFace(tensor)
+                #     # generate embeddings
+                #     faces = align_faces(frame, rects)
+                #     tensor = preprocess_batch(faces)
+                #     # embeddings = openFace(tensor)
 
                 embeddings =face_encodings
                 rects = face_locations
+                if len(embeddings) == 1:
+                    prev_conf.append(0.8)
+                    if np.mean(prev_conf) > CONF_THRESHOLD and len(prev_conf) == CONF_TO_STORE:
+                        (clf, idx_to_name), inc = add_face(clf, num_classes)
+                        print(idx_to_name)
+                        num_classes += inc
+                        prev_conf.clear()
+                        # face_encoding = np.reshape(embedding, (1, 128))
+                        np.append(known_face_encodings, embeddings, axis=0)
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
                 # # predict classes for all faces and label them if greater than threshold
                 # probs = clf.predict_proba(embeddings)
-                unknown_class_prob = 0.8#probs[0][-1]
+            unknown_class_prob = 0.8#probs[0][-1]
                 # # print(probs)
                 # predictions = np.argmax(probs, axis=1)
                 # probs = np.max(probs, axis=1)
@@ -251,21 +280,16 @@ def recognize(clf, num_classes, idx_to_name, testing):
                 #     if testing: test_results.append(names[i]) 
                 # determine if we need to trigger retraining
                 # we only retrain if there is one person in the frame and they are unrecognized or there are 0 classes
-                if len(face_encodings) == 1:
-                    prev_conf.append(unknown_class_prob)
-                    if np.mean(prev_conf) > CONF_THRESHOLD and len(prev_conf) == CONF_TO_STORE:
-                        (clf, idx_to_name), inc = add_face(clf, num_classes)
-                        print(idx_to_name)
-                        num_classes += inc
-                        prev_conf.clear()
-            else:
-                print("No faces detected.")
-            cv2.imshow('Camera Feed', frame)
-            if cv2.waitKey(1) & 0xFF == ord('r'):
-                (clf, idx_to_name), inc = add_face(clf, num_classes)
-                print(idx_to_name)
-                num_classes += inc
-                prev_conf.clear()
+
+
+            # else:
+            #     print("No faces detected.")
+            # cv2.imshow('Camera Feed', frame)
+            # if cv2.waitKey(1) & 0xFF == ord('r'):
+            #     (clf, idx_to_name), inc = add_face(clf, num_classes)
+            #     print(idx_to_name)
+            #     num_classes += inc
+            #     prev_conf.clear()
         else:
             if testing: break
             print("ERROR: no frame captured")
@@ -323,13 +347,18 @@ if __name__ == "__main__":
     print(idx_to_name)
     # cannot function as a classifier if less than 2 classes
     assert num_classes >= 2
-
     if args["clean"]:
         files = glob.glob('data/embeddings/live/*.npy')
         print(files)
         for f in files[:-1]:
             os.remove(f)
         print(glob.glob('data/embeddings/live/*.npy'))
+
+    ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
+    data, _,_ = ds.all()
+    known_face_encodings = data
+
+
 
     if args["train"] or  args["test"]:
         files = glob.glob("data/test/test_videos/*/*")
