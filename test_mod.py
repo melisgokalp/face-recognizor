@@ -1,5 +1,4 @@
 import argparse
-# import time
 from collections import deque
 
 import cv2
@@ -34,7 +33,10 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import auc
 
 
-def plot_roc_curve(fpr, tpr, fpr1=None,tpr1= None):
+def plot_roc_curve(fpr=None, tpr=None, fpr1=None,tpr1= None, mode = "dlibcomp", N_ITERS = 10):
+    # if not (fpr and tpr):
+    fpr = np.load(mode + "_" + str(N_ITERS) + "iter" + "_tpr.npy")
+    tpr = np.load(mode + "_" + str(N_ITERS) + "iter"  + "_fpr.npy")
     dauc = auc(fpr, tpr)
     print("auc is " + str(dauc))
     plt.plot(fpr, tpr, color='orange', label='Dlib AUC=' + str(dauc))
@@ -54,12 +56,13 @@ def plot_roc_curve(fpr, tpr, fpr1=None,tpr1= None):
 
 
 
-def svm_unknown_classes():
-    N_ITERS = 10
+def svm_unknown_classes(mode = "dlibcomp", N_ITERS = 10):
+    if N_ITERS is None: N_ITERS = 10
+    if mode is None: mode = "dlibcomp"
     t = []
     f = []
-    mode = "comp"
-    mode1 = "dlibcomp"
+    # mode = "comp"
+    # mode1 = "dlibcomp"
     for _ in tqdm(range(N_ITERS), total=N_ITERS):
         known = FaceDataset("data/embeddings/"+mode+"/test", "data/embeddings/"+mode+"/test", n=100)
         known_train, known_labels = known.train()
@@ -262,5 +265,26 @@ def plot():
 
 
     # return validation_rate, false_accept_rate
-# accuracy_metrics("","")
-svm_unknown_classes()
+
+
+
+if __name__ == "__main__":
+    try:
+        parser = argparse.ArgumentParser()
+    except:
+        parser.print_help()
+        sys.exit(0)    
+    parser.add_argument("--gpu", action="store_true", help="run with this flag to run on a GPU")
+    parser.add_argument("--svm_train", action="store", help="run with this flag to test using SVM using openface or dlib embeddings")
+    parser.add_argument("--iter", action="store", help="specify n of iterations, the default is 10.")
+    parser.add_argument("--plot", action="store_true", help="run with this flag to train and dev the model")  
+
+    args = vars(parser.parse_args())
+    device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
+    print("Using device {}".format(device))
+    if args["svm_train"]:
+        svm_unknown_classes(args["svm_train"],args["iter"])
+        accuracy_metrics("","")
+    if args["plot"]:
+        svm_unknown_classes(args["svm_train"],args["iter"])
+        plot_roc_curve(mode = args["svm_train"], n_iter = args["iter"])

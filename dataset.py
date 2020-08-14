@@ -58,7 +58,7 @@ class FaceDataset:
             self.labels[0].append(np.full(len(e[:int(0.8 * l)]), unknown_idx))
             self.labels[1].append(np.full(len(e[int(0.8 * l):int(0.9 * l)]), unknown_idx))
             self.labels[2].append(np.full(len(e[int(0.9 * l):]), unknown_idx))
-
+        print(dir)
         # vvvv shitass code but it wasn't working otherwise idk??
         self.data = np.concatenate(self.data[0]), np.concatenate(self.data[1]), np.concatenate(self.data[2])
         self.labels = np.concatenate(self.labels[0]), np.concatenate(self.labels[1]), np.concatenate(self.labels[2])
