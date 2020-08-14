@@ -290,5 +290,4 @@ if __name__ == "__main__":
         svm_unknown_classes(args["svm_train"],args["iter"])
         accuracy_metrics("","")
     if args["plot"]:
-        svm_unknown_classes(args["svm_train"],args["iter"])
         plot_roc_curve(mode = args["svm_train"], n_iter = args["iter"])
