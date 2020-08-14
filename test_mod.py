@@ -34,8 +34,10 @@ from sklearn.metrics import roc_auc_score
 from sklearn.metrics import auc
 
 
-def plot_roc_curve(fpr=None, tpr=None, fpr1=None,tpr1= None, mode = "dlibcomp", N_ITERS = 10):
+def plot_roc_curve(fpr=None, tpr=None, fpr1=None,tpr1= None,kernel = "rbf", mode = "dlibcomp", N_ITERS = 10):
     # if not (fpr and tpr):
+    args = vars(parser.parse_args())
+    if args["kernel"]: kernel = str(args["kernel"])
     if N_ITERS is None: N_ITERS = 10
     modes = ["dlibcomp", "comp"]
     tpr = np.load(modes[0] + "_" + str(N_ITERS) + "iter" + "_tpr.npy")
@@ -56,7 +58,7 @@ def plot_roc_curve(fpr=None, tpr=None, fpr1=None,tpr1= None, mode = "dlibcomp", 
     plt.title('Receiver Operating Characteristic (ROC) Curve')
     plt.legend() 
     time = str(datetime.datetime.now().time())
-    plotfile = 'data/roc_plot_' + time + '.png'
+    plotfile = 'data/roc_plot_' +str(N_ITERS) +"iters_" +kernel+"_"+ time + '.png'
     plt.savefig(plotfile)
     print("plot saved as: " + plotfile) 
     args = vars(parser.parse_args())
@@ -65,12 +67,13 @@ def plot_roc_curve(fpr=None, tpr=None, fpr1=None,tpr1= None, mode = "dlibcomp", 
 
 
 
-def svm_unknown_classes(mode = "dlibcomp", N_ITERS = 10):
+def svm_unknown_classes(mode = "dlibcomp", N_ITERS = 10, kernel = "rbf", C = 1.0):
     if N_ITERS is None: N_ITERS = 10
     if mode is None: mode = "dlibcomp"
     t = []
     f = []
-    # mode = "comp"
+    mode = str(mode)
+    N_ITERS = int(N_ITERS)
     # mode1 = "dlibcomp"
     for _ in tqdm(range(N_ITERS), total=N_ITERS):
         known = FaceDataset("data/embeddings/"+mode+"/test", "data/embeddings/"+mode+"/test", n=100)
@@ -118,13 +121,13 @@ def svm_unknown_classes(mode = "dlibcomp", N_ITERS = 10):
 
     t = np.mean(t, axis=0)
     f = np.mean(f, axis=0)
-    np.save(mode + "_" + str(N_ITERS) + "iter" + "_tpr.npy", t)
-    np.save(mode + "_" + str(N_ITERS) + "iter"  + "_fpr.npy", f)
+    tpr_file = mode + "_" + str(N_ITERS) + "iter" + "_tpr.npy"
+    fpr_file = mode + "_" + str(N_ITERS) + "iter"  + "_fpr.npy"
+    np.save(tpr_file, t)
+    np.save(fpr_file, f)
+    print("tpr and fpr saved as " + tpr_file + " and " + fpr_file )
     # roc_auc = auc(FPRs, TPRs)
     plot_roc_curve(f, t)
-    print(t.shape)
-    print(f.shape)
-    
 # mode = "comp"
 # mode1 = "dlibcomp"
 # t = np.load(mode1 + "_10iter" + "_tpr.npy")
@@ -285,6 +288,7 @@ if __name__ == "__main__":
         sys.exit(0)    
     parser.add_argument("--gpu", action="store_true", help="run with this flag to run on a GPU")
     parser.add_argument("--svm_train", action="store", help="run with this flag to test using SVM using openface or dlib embeddings")
+    parser.add_argument("--kernel", action="store", help="specify the rbf kernel to be used in SVM training using this flag")
     parser.add_argument("--iter", action="store", help="specify n of iterations, the default is 10.")
     parser.add_argument("--plot", action="store_true", help="run with this flag to train and dev the model")  
     parser.add_argument("--show", action="store_true", help="run with this flag to show the plot")
@@ -293,7 +297,10 @@ if __name__ == "__main__":
     device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
     print("Using device {}".format(device))
     if args["svm_train"]:
-        svm_unknown_classes(args["svm_train"], int(args["iter"]))
+        if args["kernel"]:
+            svm_unknown_classes(args["svm_train"], args["iter"], kernel = str(args["kernel"]))
+        else:
+            svm_unknown_classes(args["svm_train"], args["iter"])
         accuracy_metrics("","")
     if args["plot"]:
-        plot_roc_curve(mode = args["svm_train"], N_ITERS = int(args["iter"]))
+        plot_roc_curve(mode = args["svm_train"], N_ITERS = args["iter"])
