@@ -43,7 +43,8 @@ def plot_roc_curve(fpr=None, tpr=None, fpr1=None,tpr1= None, mode = "dlibcomp", 
     dauc = auc(fpr, tpr)
     print("auc is " + str(dauc))
     plt.plot(fpr, tpr, color='orange', label='Dlib AUC=' + str(dauc))
-
+    print(fpr1)
+    print(tpr1)
     dauc = auc(fpr1, tpr1)
     print("auc is " + str(dauc))
     plt.plot(fpr1, tpr1, color='blue', label='OpenFace AUC=' + str(dauc))
