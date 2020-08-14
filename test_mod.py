@@ -35,8 +35,11 @@ from sklearn.metrics import auc
 
 def plot_roc_curve(fpr=None, tpr=None, fpr1=None,tpr1= None, mode = "dlibcomp", N_ITERS = 10):
     # if not (fpr and tpr):
-    fpr = np.load(mode + "_" + str(N_ITERS) + "iter" + "_tpr.npy")
-    tpr = np.load(mode + "_" + str(N_ITERS) + "iter"  + "_fpr.npy")
+    modes = ["dlibcomp", "comp"]
+    fpr = np.load(modes[0] + "_" + str(N_ITERS) + "iter" + "_tpr.npy")
+    tpr = np.load(modes[0] + "_" + str(N_ITERS) + "iter"  + "_fpr.npy")
+    fpr1 = np.load(modes[1] + "_" + str(N_ITERS) + "iter" + "_tpr.npy")
+    tpr1 = np.load(modes[1] + "_" + str(N_ITERS) + "iter"  + "_fpr.npy")
     dauc = auc(fpr, tpr)
     print("auc is " + str(dauc))
     plt.plot(fpr, tpr, color='orange', label='Dlib AUC=' + str(dauc))
