@@ -21,9 +21,6 @@ import face_recognition
 CONF_THRESHOLD = 0.6
 CONF_TO_STORE = 30
 
-#TODO: jitter training data with gaussian noise and saturation.
-#TODO: SVM running on unknown class
-
 def capture_faces(seconds=20, sampling_duration=0.1, debug=False):
     print("Capturing! about to capture {} seconds of video".format(seconds))
     start_time = time.time()
@@ -82,7 +79,6 @@ def retrain_classifier(clf):
     ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
     data, labels, idx_to_name = ds.all()
     clf = clf.fit(data, labels)
-    # print(ds.test())
     return clf, idx_to_name
 
 def sample_encode(samples):

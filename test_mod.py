@@ -108,7 +108,7 @@ def svm_unknown_classes():
     np.save(mode + "_10iter" + "_tpr.npy", t)
     np.save(mode + "_10iter" + "_fpr.npy", f)
     # roc_auc = auc(FPRs, TPRs)
-    # plot_roc_curve(f, t)
+    plot_roc_curve(f, t)
     print(t.shape)
     print(f.shape)
     
@@ -261,6 +261,5 @@ def plot():
 
 
     # return validation_rate, false_accept_rate
-accuracy_metrics("","")
-
-# svm_unknown_classes()
+# accuracy_metrics("","")
+svm_unknown_classes()

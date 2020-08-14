@@ -356,8 +356,6 @@ if __name__ == "__main__":
 
     np.save("data/test/test_results/accs/" + "all_test" + ".npy", np.asarray(all_test_results)) 
     print(len(test_imgs))
-    print(len(all_test_results))
-    print(len(all_test_results[0]))
     tmod.accuracy_metrics(test_imgs, all_test_results)
     print("ALL DONE!!")
 
