@@ -49,6 +49,7 @@ def plot_roc_curve(fpr, tpr, fpr1=None,tpr1= None):
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic (ROC) Curve')
     plt.legend()
+    plt.savefig('data/roc_plot.png')
     plt.show()
 
 
