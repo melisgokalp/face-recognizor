@@ -1,5 +1,6 @@
 import argparse
 from collections import deque
+import datetime
 
 import cv2
 import numpy as np
@@ -35,16 +36,15 @@ from sklearn.metrics import auc
 
 def plot_roc_curve(fpr=None, tpr=None, fpr1=None,tpr1= None, mode = "dlibcomp", N_ITERS = 10):
     # if not (fpr and tpr):
+    if N_ITERS is None: N_ITERS = 10
     modes = ["dlibcomp", "comp"]
-    fpr = np.load(modes[0] + "_" + str(N_ITERS) + "iter" + "_tpr.npy")
-    tpr = np.load(modes[0] + "_" + str(N_ITERS) + "iter"  + "_fpr.npy")
-    fpr1 = np.load(modes[1] + "_" + str(N_ITERS) + "iter" + "_tpr.npy")
-    tpr1 = np.load(modes[1] + "_" + str(N_ITERS) + "iter"  + "_fpr.npy")
+    tpr = np.load(modes[0] + "_" + str(N_ITERS) + "iter" + "_tpr.npy")
+    fpr = np.load(modes[0] + "_" + str(N_ITERS) + "iter"  + "_fpr.npy")
+    tpr1 = np.load(modes[1] + "_" + str(N_ITERS) + "iter" + "_tpr.npy")
+    fpr1 = np.load(modes[1] + "_" + str(N_ITERS) + "iter"  + "_fpr.npy")
     dauc = auc(fpr, tpr)
     print("auc is " + str(dauc))
     plt.plot(fpr, tpr, color='orange', label='Dlib AUC=' + str(dauc))
-    print(fpr1)
-    print(tpr1)
     dauc = auc(fpr1, tpr1)
     print("auc is " + str(dauc))
     plt.plot(fpr1, tpr1, color='blue', label='OpenFace AUC=' + str(dauc))
@@ -54,9 +54,14 @@ def plot_roc_curve(fpr=None, tpr=None, fpr1=None,tpr1= None, mode = "dlibcomp", 
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic (ROC) Curve')
-    plt.legend()
-    plt.savefig('data/roc_plot.png')
-    plt.show()
+    plt.legend() 
+    time = str(datetime.datetime.now().time())
+    plotfile = 'data/roc_plot_' + time + '.png'
+    plt.savefig(plotfile)
+    print("plot saved as: " + plotfile) 
+    args = vars(parser.parse_args())
+    if args["show"]:
+        plt.show()
 
 
 
@@ -282,6 +287,7 @@ if __name__ == "__main__":
     parser.add_argument("--svm_train", action="store", help="run with this flag to test using SVM using openface or dlib embeddings")
     parser.add_argument("--iter", action="store", help="specify n of iterations, the default is 10.")
     parser.add_argument("--plot", action="store_true", help="run with this flag to train and dev the model")  
+    parser.add_argument("--show", action="store_true", help="run with this flag to show the plot")
 
     args = vars(parser.parse_args())
     device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
@@ -290,4 +296,4 @@ if __name__ == "__main__":
         svm_unknown_classes(args["svm_train"],args["iter"])
         accuracy_metrics("","")
     if args["plot"]:
-        plot_roc_curve(mode = args["svm_train"], n_iter = args["iter"])
+        plot_roc_curve(mode = args["svm_train"], N_ITERS = args["iter"])
