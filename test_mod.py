@@ -105,8 +105,8 @@ def svm_unknown_classes():
 
     t = np.mean(t, axis=0)
     f = np.mean(f, axis=0)
-    np.save(mode + "_10iter" + "_tpr.npy", t)
-    np.save(mode + "_10iter" + "_fpr.npy", f)
+    np.save(mode + "_" + str(N_ITERS) + "iter" + "_tpr.npy", t)
+    np.save(mode + "_" + str(N_ITERS) + "iter"  + "_fpr.npy", f)
     # roc_auc = auc(FPRs, TPRs)
     plot_roc_curve(f, t)
     print(t.shape)
