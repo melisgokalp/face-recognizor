@@ -90,7 +90,7 @@ def svm_unknown_classes(mode = "dlibcomp", N_ITERS = 10, kernel = "rbf", C = 1.0
         # train the SVM on the classes with the random seed
         full_training = np.concatenate([known_train, seed_train])
         full_labels = np.concatenate([known_labels, seed_labels])
-        clf = svm.SVC(kernel="rbf", gamma="scale", C=1.0, probability=True)
+        clf = svm.SVC(kernel=kernel, gamma="scale", C=1.0, probability=True)
         clf.fit(full_training, full_labels)
 
         # run SVM on the unknown set
