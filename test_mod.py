@@ -232,8 +232,9 @@ def save_accuracies(testname, data):
         name = embedding.split("/")[-1]
         # name = name.split(".")[0]
         all_names.append(name)
+    all_names.remove("z_multiple_people")
     all_names.append("unknown_class")
-    all_names.append("no detection")
+    # all_names.append("no detection")
     print(all_names)
     onehot = np.zeros((len(all_names),1))
     for name in data:
@@ -248,6 +249,8 @@ def save_accuracies(testname, data):
     data = np.asarray([])
     if os.path.isfile(result_data):
         data = load(result_data)
+        print(data.shape)
+        print(onehot.shape)
         onehot = np.vstack([data, onehot])
     save(result_data, onehot)
 
