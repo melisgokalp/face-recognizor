@@ -20,9 +20,6 @@ from classifiers.binary_face_classifier import BinaryFaceClassifier, BinaryFaceN
 CONF_THRESHOLD = 0.6
 CONF_TO_STORE = 30
 
-#TODO: jitter training data with gaussian noise and saturation.
-#TODO: SVM running on unknown class
-
 def capture_faces(seconds=20, sampling_duration=0.1, debug=False):
     print("Capturing! about to capture {} seconds of video".format(seconds))
     start_time = time.time()
@@ -85,19 +82,20 @@ def retrain_classifier(clf):
     return clf, idx_to_name
 
 
-def add_face(clf, num_classes):
+def add_face(clf, num_classes, retrain):
     name = testname
     if not args["train"]:
         name = input("We don't recognize you! Please enter your name:\n").strip().lower()
     increment = 1
     live_embeddings_loc = "data/embeddings/live"
-    # while name in name_to_idx:
-    #     print("Face exists, append to embeddings!")
-    #     existing_face = np.load("data/embeddings/{}.npy".format(name))
-    #     with open('myfile.npy', 'ab') as f_handle:
-    #         np.save(f_handle, Matrix)
-    #     np.save("data/embeddings/{}.npy".format(name), embeddings)
-    #     return retrain_classifier(clf), 0
+    if retrain:
+        while name in name_to_idx:
+            print("Face exists, append to embeddings!")
+            existing_face = np.load("data/embeddings/{}.npy".format(name))
+            with open('myfile.npy', 'ab') as f_handle:
+                np.save(f_handle, Matrix)
+            np.save("data/embeddings/{}.npy".format(name), embeddings)
+            return retrain_classifier(clf), 0
     if name == "skip":
         return retrain_classifier(clf), 0
     samples = capture_faces()
@@ -136,7 +134,7 @@ def load_model():
     clf = clf.fit(data, labels)
     return clf, num_classes, ds.ix_to_name
 
-def recognize(clf, num_classes, idx_to_name, testing):
+def recognize(clf, num_classes, idx_to_name, testing, retrain):
     # to store previous confidences to determine whether a face exists
     prev_conf = deque(maxlen=CONF_TO_STORE)
     f_count = 1
@@ -192,7 +190,7 @@ def recognize(clf, num_classes, idx_to_name, testing):
                 if len(faces) == 1:
                     prev_conf.append(unknown_class_prob)
                     if np.mean(prev_conf) > CONF_THRESHOLD and len(prev_conf) == CONF_TO_STORE:
-                        (clf, idx_to_name), inc = add_face(clf, num_classes)
+                        (clf, idx_to_name), inc = add_face(clf, num_classes, retrain)
                         print(idx_to_name)
                         num_classes += inc
                         prev_conf.clear()
@@ -200,7 +198,7 @@ def recognize(clf, num_classes, idx_to_name, testing):
                 print("No faces detected.")
             cv2.imshow('Camera Feed', frame)
             if cv2.waitKey(1) & 0xFF == ord('r'):
-                (clf, idx_to_name), inc = add_face(clf, num_classes)
+                (clf, idx_to_name), inc = add_face(clf, num_classes, retrain)
                 print(idx_to_name)
                 num_classes += inc
                 prev_conf.clear()
@@ -248,6 +246,7 @@ if __name__ == "__main__":
     parser.add_argument("--train", action="store_true", help="run with this flag to train and dev the model") 
     parser.add_argument("--test", action="store_true", help="run with this flag to test the model") 
     parser.add_argument("--live", action="store_true", help="run with this flag to have a camera demo") 
+    parser.add_argument("--retrain", action="store_true", help="run with this flag to retrain for false negatives") 
     parser.add_argument('--note', action='store', type=str, help='The text to parse.')
     parser.add_argument('--clean', action='store_true', help='run with this flag to remove previous embeddings')
 
@@ -284,14 +283,14 @@ if __name__ == "__main__":
         if args["test"]:
             files += tests
             mode += "Testing "
-        # random.shuffle(trains)
+        random.shuffle(trains)
         for i in tqdm(range(start, len(files)), total=len(files)):
             file = files[i]
             video_capture = cv2.VideoCapture(file)
             testname = file.split("/")[-2].replace("_", " ")
             print(mode + testname + " for file " + file)
             name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
-            recognize(clf, num_classes, idx_to_name, True)
+            recognize(clf, num_classes, idx_to_name, True, args["retrain"])
             clf, num_classes, idx_to_name = load_model()
         print("DONE!! Mode was " + mode)
         tmod.plot()
