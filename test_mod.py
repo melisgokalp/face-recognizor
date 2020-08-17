@@ -201,6 +201,7 @@ def plot_acc(data, mode = "test", note = ""):
         name = embedding.split("/")[-1]
         name = name.split(".")[0]
         all_names.append(name)
+    all_names.append("z_multiple_people")
     all_names.append("unknown")
     all_names.append("no detection")
     print(all_names)
@@ -224,11 +225,12 @@ def plot_acc(data, mode = "test", note = ""):
 
 def save_accuracies(testname, data):
     # We save names of all the embeddings
-    live_embeddings = glob.glob('data/embeddings/live/*.npy')
+    live_embeddings = glob.glob('data/test/test_videos/*')
     all_names = []
+    print(live_embeddings)
     for embedding in live_embeddings:
         name = embedding.split("/")[-1]
-        name = name.split(".")[0]
+        # name = name.split(".")[0]
         all_names.append(name)
     all_names.append("unknown_class")
     all_names.append("no detection")
