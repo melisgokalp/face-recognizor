@@ -205,18 +205,9 @@ def recognize(clf, num_classes, idx_to_name, testing, retrain):
         else:
             if testing: break
             print("ERROR: no frame captured")
-    if testing:  tmod.plot_acc(testname, test_results)
+    if testing:  tmod.save_accuracies(testname, test_results)
     video_capture.release()
     cv2.destroyAllWindows()
-
-# def frames_to_vid(frame_array, filename):
-#     print("Video is being saved...")
-#     # print(frame_array[0])
-#     # print(frame_array[0].shape)
-#     out = cv2.VideoWriter(filename,cv2.VideoWriter_fourcc(*'avc1'), 5.0, (frame_array[0].shape[0], frame_array[0].shape[1]), True)
-#     for frame in frame_array:
-#         out.write(frame)
-#     out.release()
 
 def write_log(test_res, videoname):
     print("Writing test result logs")
@@ -247,6 +238,7 @@ if __name__ == "__main__":
     parser.add_argument("--test", action="store_true", help="run with this flag to test the model") 
     parser.add_argument("--live", action="store_true", help="run with this flag to have a camera demo") 
     parser.add_argument("--retrain", action="store_true", help="run with this flag to retrain for false negatives") 
+    parser.add_argument("--plot", action="store_true", help="run with this flag to plot the results") 
     parser.add_argument('--note', action='store', type=str, help='The text to parse.')
     parser.add_argument('--clean', action='store_true', help='run with this flag to remove previous embeddings')
 
@@ -293,8 +285,11 @@ if __name__ == "__main__":
             recognize(clf, num_classes, idx_to_name, True, args["retrain"])
             clf, num_classes, idx_to_name = load_model()
         print("DONE!! Mode was " + mode)
-        tmod.plot()
+
     if args["live"]:
         print("Starting video capture...")
         video_capture = cv2.VideoCapture(0)
         recognize(clf, num_classes, idx_to_name, args["test"])
+
+    if args["plot"]:
+        tmod.plot()
