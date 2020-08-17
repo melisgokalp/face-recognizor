@@ -92,10 +92,11 @@ def add_face(clf, num_classes, retrain):
     if retrain:
         while name in name_to_idx:
             print("Face exists, append to embeddings!")
-            existing_face = np.load("data/embeddings/{}.npy".format(name))
+            filename = LIVE_EMBEDDINGS+"/{}.npy".format(name)
+            existing_face = np.load(filename)
             with open('myfile.npy', 'ab') as f_handle:
                 np.save(f_handle, Matrix)
-            np.save("data/embeddings/{}.npy".format(name), embeddings)
+            np.save(filename, embeddings)
             return retrain_classifier(clf), 0
     if name == "skip":
         return retrain_classifier(clf), 0

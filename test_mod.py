@@ -276,23 +276,35 @@ def plot_onehots():
     keys = list(dat_dict.keys())
     vals = list(dat_dict.values())
     print(keys)
+    res = {}
     for k in keys:
         print(dat_dict[k].shape)
-        sum = np.sum(dat_dict[k], axis=0)
-        maxd = np.max(sum)
-        acc = maxd / np.sum(sum)
-        print(maxd)
-        print(acc)
+        part = dat_dict[k]
+        accs = []
+        for i in range(0,len(part), 100):
+            sum = np.sum(part[i:i+100], axis=0)
+            maxd = np.max(sum)
+            acc = maxd / np.sum(sum)
+            print(maxd)
+            print(k)
+            name = " ".join(k.split(" ")[:2])
+            print(acc)
+            accs.append(acc)
+        res[name].append(accs)
+    print(res)
+
     # df = pd.DataFrame(dat_dict) 
     # file1 = open("data/test/test_results/table_results.txt", "a+")  # append mode
     # file1.write(tabulate(df, headers='keys', tablefmt='psql'))
     # file1.close()
-
+    keys = list(res.keys())
+    vals = list(res.values())
+    print(keys)
     for i in range(len(keys)):
         plt.plot(vals[i], label = keys[i], marker='o', markerfacecolor='blue', markersize=5)
         val = vals[i]
-        for i in range(len(val)):
-            plt.annotate("{:.2f}".format(val[i]),(i,val[i]), textcoords="offset points", xytext=(0,10), ha='center')
+        for i in range(len(vals)):
+            plt.annotate("{:.2f}".format(val),(i,val), textcoords="offset points", xytext=(0,10), ha='center')
     # for col in dat_dict.keys():
     #     print(col)
     #     plt.plot(  col, data=df, marker='o', markerfacecolor='blue', markersize=12, color='skyblue', linewidth=4)
@@ -305,7 +317,7 @@ def plot_onehots():
     plt.legend()
     plt.ylabel('Accuracy (%)')
     plt.title('Accuracies throughout training and testing')
-    plt.xticks(np.arange(0,3,1),labels = ["train", "dev", "test"])
+    # plt.xticks(np.arange(0,3,1),labels = ["train", "dev", "test"])
     plt.grid()
     plt.savefig('test.png')
     plt.show()
