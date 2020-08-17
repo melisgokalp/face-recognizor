@@ -195,18 +195,18 @@ def accuracy_metrics(truth_labels, tested_labels):
 
 def plot_acc(data, mode = "test", note = ""):
     # We save names of all the embeddings
-    # live_embeddings = glob.glob('data/embeddings/live/*.npy')
-    # all_names = []
-    # for embedding in live_embeddings:
-    #     name = embedding.split("/")[-1]
-    #     name = name.split(".")[0]
-    #     all_names.append(name)
-    # all_names.append("unknown")
-    # all_names.append("no detection")
-    # print(all_names)
-    # onehot = np.zeros((len(all_names),1))
-    # for name in data:
-    #     onehot[all_names.index(name)] = 1
+    live_embeddings = glob.glob('data/embeddings/live/*.npy')
+    all_names = []
+    for embedding in live_embeddings:
+        name = embedding.split("/")[-1]
+        name = name.split(".")[0]
+        all_names.append(name)
+    all_names.append("unknown")
+    all_names.append("no detection")
+    print(all_names)
+    onehot = np.zeros((len(all_names),1))
+    for name in data:
+        onehot[all_names.index(name)] = 1
 
     onehot = np.asarray(data)
     print(data)
@@ -223,6 +223,20 @@ def plot_acc(data, mode = "test", note = ""):
     save(result_data, data)
 
 def save_accuracies(data, testname):
+    # We save names of all the embeddings
+    live_embeddings = glob.glob('data/embeddings/live/*.npy')
+    all_names = []
+    for embedding in live_embeddings:
+        name = embedding.split("/")[-1]
+        name = name.split(".")[0]
+        all_names.append(name)
+    all_names.append("unknown")
+    all_names.append("no detection")
+    print(all_names)
+    onehot = np.zeros((len(all_names),1))
+    for name in data:
+        onehot[all_names.index(name)] = 1
+
     onehot = np.asarray(data)
     print(data)
     for name in data:
