@@ -149,7 +149,8 @@ def recognize(clf, num_classes, idx_to_name, testing, retrain, hide):
     else:
         print("Starting video capture...")
         # video_capture = cv2.VideoCapture(0)
-    CONF_THRESHOLD += min (0.8, 0.2/num_classes)
+    if CONF_THRESHOLD < 0.8:
+        CONF_THRESHOLD += 0.2/num_classes 
     print(CONF_THRESHOLD)
     while True and f_count<= 200:
         # ret is error code but we don't care about it
