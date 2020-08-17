@@ -247,6 +247,7 @@ def save_accuracies(testname, data):
     if os.path.isfile(result_data):
         data = load(result_data)
     onehot = np.vstack([data, onehot])
+    print(data)
     print(onehot)
     save(result_data, data)
 
