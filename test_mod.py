@@ -235,15 +235,15 @@ def save_accuracies(testname, data):
     all_names.remove("z_multiple_people")
     all_names.append("unknown_class")
     # all_names.append("no detection")
-    print(all_names)
 
     res = []
     for name in data:
         onehot = np.zeros((len(all_names),1))
         onehot[all_names.index(name)] = 1
         res.append(onehot)
-    onehot = np.asarray(onehot)
-    print(onehot)
+    onehot = np.asarray(res)
+    # print(onehot)
+    print(onehot.shape)
     # for name in data:
     #     onehot[all_names.index(name)] = 1
     file_name = "result_data"
@@ -253,7 +253,7 @@ def save_accuracies(testname, data):
         data = load(result_data)
         print(data.shape)
         print(onehot.shape)
-        onehot = np.hstack([data, onehot])
+        onehot = np.vstack([data, onehot])
     save(result_data, onehot)
 
 
