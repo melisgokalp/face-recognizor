@@ -19,8 +19,10 @@ from classifiers.binary_face_classifier import BinaryFaceClassifier, BinaryFaceN
 
 CONF_THRESHOLD = 0.6
 CONF_TO_STORE = 30
+LIVE_EMBEDDINGS = "data/embeddings/live"
+TRAIN_EMBEDDINGS = "data/embeddings/train"
 
-def capture_faces(seconds=20, sampling_duration=0.1, debug=False):
+def capture_faces(seconds=10, sampling_duration=0.1, debug=False):
     print("Capturing! about to capture {} seconds of video".format(seconds))
     start_time = time.time()
 
@@ -75,7 +77,7 @@ def augment_data(image):
     return [np.array(hue1), np.array(hue2), np.array(sat1), np.array(sat2)]
 
 def retrain_classifier(clf):
-    ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
+    ds = FaceDataset(LIVE_EMBEDDINGS, TRAIN_EMBEDDINGS)
     data, labels, idx_to_name = ds.all()
     clf = clf.fit(data, labels)
     # print(ds.test())
@@ -87,7 +89,6 @@ def add_face(clf, num_classes, retrain):
     if not args["train"]:
         name = input("We don't recognize you! Please enter your name:\n").strip().lower()
     increment = 1
-    live_embeddings_loc = "data/embeddings/live"
     if retrain:
         while name in name_to_idx:
             print("Face exists, append to embeddings!")
@@ -108,14 +109,14 @@ def add_face(clf, num_classes, retrain):
 
     if name in name_to_idx:
         print("Face exists, append to embeddings!\n")
-        embeddings = update_embedding(live_embeddings_loc, embeddings, name)
+        embeddings = update_embedding(LIVE_EMBEDDINGS, embeddings, name)
         increment = 0
     # save name and embeddings
-    np.save(live_embeddings_loc + "/{}.npy".format(name), embeddings)
+    np.save(LIVE_EMBEDDINGS + "/{}.npy".format(name), embeddings)
     return retrain_classifier(clf), increment
 
-def update_embedding(live_embeddings_loc, embeddings, name):
-    existing_face = np.load(live_embeddings_loc + "/{}.npy".format(name))
+def update_embedding(LIVE_EMBEDDINGS, embeddings, name):
+    existing_face = np.load(LIVE_EMBEDDINGS + "/{}.npy".format(name))
     # size is like samplesx128 so change the sample size
     embeddings = np.vstack([existing_face, embeddings])
     np.random.shuffle(embeddings)
@@ -124,11 +125,11 @@ def update_embedding(live_embeddings_loc, embeddings, name):
 
 def load_model():
     # TODO: in the future we should look at model persistence to disk
-    clf = svm.SVC(kernel="rbf", C=1.0, probability=True)
+    clf = svm.SVC(kernel="linear", C=1.0, probability=True)
     #network = BinaryFaceNetwork(device)
     #network.load_state_dict(torch.load("data/binary_face_classifier.pt", map_location=device))
     #clf = BinaryFaceClassifier(network, 0.5)
-    ds = FaceDataset("data/embeddings/live", "data/embeddings/train")
+    ds = FaceDataset(LIVE_EMBEDDINGS, TRAIN_EMBEDDINGS)
     data, labels, idx_to_name = ds.all()
     num_classes = len(np.unique(labels))
     clf = clf.fit(data, labels)
@@ -250,11 +251,11 @@ if __name__ == "__main__":
     openFace = load_openface(device) 
 
     if args["clean"]:
-        files = glob.glob('data/embeddings/live/*.npy')
+        files = glob.glob(LIVE_EMBEDDINGS + '/*.npy')
         print(files)
         for f in files[:-1]:
             os.remove(f)
-        print(glob.glob('data/embeddings/live/*.npy'))
+        print(glob.glob(LIVE_EMBEDDINGS + '/*.npy'))
 
     clf, num_classes, idx_to_name = load_model()
     print(idx_to_name)
