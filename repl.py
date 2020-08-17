@@ -149,7 +149,7 @@ def recognize(clf, num_classes, idx_to_name, testing, retrain, hide):
     else:
         print("Starting video capture...")
         # video_capture = cv2.VideoCapture(0)
-    CONF_THRESHOLD += 0.2/num_classes
+    CONF_THRESHOLD += min (0.8, 0.2/num_classes)
     print(CONF_THRESHOLD)
     while True and f_count<= 200:
         # ret is error code but we don't care about it
@@ -248,8 +248,6 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
     device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
     print("Using device {}".format(device))
-    openFace = load_openface(device) 
-
     if args["clean"]:
         files = glob.glob(LIVE_EMBEDDINGS + '/*.npy')
         print(files)
@@ -257,6 +255,7 @@ if __name__ == "__main__":
             os.remove(f)
         print(glob.glob(LIVE_EMBEDDINGS + '/*.npy'))
 
+    openFace = load_openface(device) 
     clf, num_classes, idx_to_name = load_model()
     print(idx_to_name)
     # cannot function as a classifier if less than 2 classes

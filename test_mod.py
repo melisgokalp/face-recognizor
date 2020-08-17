@@ -293,8 +293,8 @@ def plot():
     plt.title('Accuracies throughout training and testing')
     plt.xticks(np.arange(0,3,1),labels = ["train", "dev", "test"])
     plt.grid()
-    plt.show()
     plt.savefig('test.png')
+    plt.show()
     # p_same = len(truth_labels)
     # true_accepts = truth_labels == tested_labels
     # p_diff = len(tested_labels) - len(true_accepts)
