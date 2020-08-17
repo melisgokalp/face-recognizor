@@ -246,10 +246,8 @@ def save_accuracies(testname, data):
     data = np.asarray([])
     if os.path.isfile(result_data):
         data = load(result_data)
-    onehot = np.vstack([data, onehot])
-    print(data)
-    print(onehot)
-    save(result_data, data)
+        onehot = np.vstack([data, onehot])
+    save(result_data, onehot)
 
 
 def plot():
