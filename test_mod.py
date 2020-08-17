@@ -240,10 +240,10 @@ def save_accuracies(testname, data):
     for name in data:
         onehot[all_names.index(name)] = 1
 
-    onehot = np.asarray(data)
-    print(data)
-    for name in data:
-        onehot[all_names.index(name)] = 1
+    onehot = np.asarray(onehot)
+    print(onehot)
+    # for name in data:
+    #     onehot[all_names.index(name)] = 1
     file_name = "result_data"
     result_data = "data/test/test_results/accs/" +  testname + "_unretrained_"+file_name + ".npy"
     data = np.asarray([])
