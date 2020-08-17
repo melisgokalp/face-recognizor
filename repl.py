@@ -22,7 +22,7 @@ CONF_TO_STORE = 30
 LIVE_EMBEDDINGS = "data/embeddings/live"
 TRAIN_EMBEDDINGS = "data/embeddings/train"
 
-def capture_faces(seconds=10, sampling_duration=0.1, debug=False):
+def capture_faces(seconds=20, sampling_duration=0.1, debug=False):
     print("Capturing! about to capture {} seconds of video".format(seconds))
     start_time = time.time()
 
@@ -92,11 +92,10 @@ def add_face(clf, num_classes, retrain):
     if retrain:
         while name in name_to_idx:
             print("Face exists, append to embeddings!")
-            filename = LIVE_EMBEDDINGS+"/{}.npy".format(name)
-            existing_face = np.load(filename)
+            existing_face = np.load("data/embeddings/live/{}.npy".format(name))
             with open('myfile.npy', 'ab') as f_handle:
                 np.save(f_handle, Matrix)
-            np.save(filename, embeddings)
+            np.save("data/embeddings/live/{}.npy".format(name), embeddings)
             return retrain_classifier(clf), 0
     if name == "skip":
         return retrain_classifier(clf), 0
@@ -126,7 +125,7 @@ def update_embedding(LIVE_EMBEDDINGS, embeddings, name):
 
 def load_model():
     # TODO: in the future we should look at model persistence to disk
-    clf = svm.SVC(kernel="linear", C=1.0, probability=True)
+    clf = svm.SVC(kernel="rbf", C=1.0, probability=True)
     #network = BinaryFaceNetwork(device)
     #network.load_state_dict(torch.load("data/binary_face_classifier.pt", map_location=device))
     #clf = BinaryFaceClassifier(network, 0.5)
@@ -150,8 +149,7 @@ def recognize(clf, num_classes, idx_to_name, testing, retrain, hide):
     else:
         print("Starting video capture...")
         # video_capture = cv2.VideoCapture(0)
-    # if CONF_THRESHOLD < 0.8:
-    CONF_THRESHOLD = 0.6 + 0.2/num_classes 
+    CONF_THRESHOLD += 0.2/num_classes
     print(CONF_THRESHOLD)
     while True and f_count<= 200:
         # ret is error code but we don't care about it
@@ -250,14 +248,16 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
     device = torch.device("cuda") if args["gpu"] and torch.cuda.is_available() else torch.device("cpu")
     print("Using device {}".format(device))
+    openFace = load_openface(device) 
+
     if args["clean"]:
+    
         files = glob.glob(LIVE_EMBEDDINGS + '/*.npy')
         print(files)
         for f in files[:-1]:
             os.remove(f)
-        print(glob.glob(LIVE_EMBEDDINGS + '/*.npy'))
+        print(glob.glob('data/embeddings/live/*.npy'))
 
-    openFace = load_openface(device) 
     clf, num_classes, idx_to_name = load_model()
     print(idx_to_name)
     # cannot function as a classifier if less than 2 classes
@@ -284,7 +284,7 @@ if __name__ == "__main__":
         for i in tqdm(range(start, len(files)), total=len(files)):
             file = files[i]
             video_capture = cv2.VideoCapture(file)
-            testname = file.split("/")[-2] #.replace("_", " ")
+            testname = file.split("/")[-2].replace("_", " ")
             print(mode + testname + " for file " + file)
             name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
             recognize(clf, num_classes, idx_to_name, True, args["retrain"],  args["hide"])
