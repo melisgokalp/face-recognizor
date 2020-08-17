@@ -251,14 +251,14 @@ def save_accuracies(testname, data):
         data = load(result_data)
         print(data.shape)
         print(onehot.shape)
-        onehot = np.vstack([data, onehot])
+        onehot = np.hstack([data, onehot])
     save(result_data, onehot)
 
 
 def plot():
 
     dat_dict = {}
-    for file in glob.glob("data/test/test_results/accs/*.npy"):
+    for file in glob.glob("data/test/test_results/accs/untrained/*.npy"):
         name = (file.split("/")[-1].replace("_", " ")).split(".")[0]
         dat_dict[name] = load(file)
     # dat_dict['x'] = np.asarray(range(len(data)))
@@ -272,14 +272,12 @@ def plot():
     keys = list(dat_dict.keys())
     vals = list(dat_dict.values())
 
-    df = pd.DataFrame(dat_dict) 
-    file1 = open("data/test/test_results/table_results.txt", "a+")  # append mode
-    file1.write(tabulate(df, headers='keys', tablefmt='psql'))
-    file1.close()
-
+    # df = pd.DataFrame(dat_dict) 
+    # file1 = open("data/test/test_results/table_results.txt", "a+")  # append mode
+    # file1.write(tabulate(df, headers='keys', tablefmt='psql'))
+    # file1.close()
+    print(len(vals[0]))
     for i in range(len(keys)):
-        # print(vals[i])
-        # print(keys[i])
         plt.plot(vals[i], label = keys[i], marker='o', markerfacecolor='blue', markersize=5)
         val = vals[i]
         for i in range(len(val)):
@@ -336,4 +334,5 @@ if __name__ == "__main__":
             svm_unknown_classes(args["svm_train"], args["iter"])
         accuracy_metrics("","")
     if args["plot"]:
-        plot_roc_curve(mode = args["svm_train"], N_ITERS = args["iter"])
+        plot()
+        # plot_roc_curve(mode = args["svm_train"], N_ITERS = args["iter"])
