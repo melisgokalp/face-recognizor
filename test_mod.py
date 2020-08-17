@@ -194,6 +194,8 @@ def accuracy_metrics(truth_labels, tested_labels):
 
 
 def plot_acc(data, mode = "test", note = ""):
+    dictt = {0: 'bernie_sanders', 1: 'michelle_obama', 2: 'joe_biden', 3: 'andrew_yang', 4: 'malala_yousafzai', 5: 'barack_obama', 6: 'trevor_noah', 7: 'lilly_singh', 8: 'ramy_youssef', 9: 'unknown_class'}
+
     # We save names of all the embeddings
     live_embeddings = glob.glob('data/embeddings/live/*.npy')
     all_names = []
@@ -247,7 +249,7 @@ def save_accuracies(testname, data):
     # for name in data:
     #     onehot[all_names.index(name)] = 1
     file_name = "result_data"
-    result_data = "data/test/test_results/accs/" +  testname + "_unretrained_"+file_name + ".npy"
+    result_data = "data/test/test_results/onehots/" +  testname + "_unretrained_"+file_name + ".npy"
     data = np.asarray([])
     if os.path.isfile(result_data):
         data = load(result_data)
@@ -257,8 +259,60 @@ def save_accuracies(testname, data):
     save(result_data, onehot)
 
 
-def plot():
+def plot_onehots():
+    dat_dict = {}
+    for file in glob.glob("data/test/test_results/accs/untrained/*.npy"):
+        name = (file.split("/")[-1].replace("_", " ")).split(".")[0]
+        dat_dict[name] = load(file)
+    # dat_dict['x'] = np.asarray(range(len(data)))
+    # print("!! dat_dict: ", dat_dict)
 
+    # df=pd.DataFrame({'x': range(1,11), 'y1': np.random.randn(10), 'y2': np.random.randn(10)+range(1,11), 'y3': np.random.randn(10)+range(11,21) })
+    # df=pd.DataFrame(dat_dict)
+    # print(list(dat_dict.values()))
+    # print(list(dat_dict.keys()))
+    # plt.plot(list(dat_dict.values())[0], label=list(dat_dict.keys()))
+    keys = list(dat_dict.keys())
+    vals = list(dat_dict.values())
+
+    # df = pd.DataFrame(dat_dict) 
+    # file1 = open("data/test/test_results/table_results.txt", "a+")  # append mode
+    # file1.write(tabulate(df, headers='keys', tablefmt='psql'))
+    # file1.close()
+    print(len(vals[0]))
+    for i in range(len(keys)):
+        plt.plot(vals[i], label = keys[i], marker='o', markerfacecolor='blue', markersize=5)
+        val = vals[i]
+        for i in range(len(val)):
+            plt.annotate("{:.2f}".format(val[i]),(i,val[i]), textcoords="offset points", xytext=(0,10), ha='center')
+    # for col in dat_dict.keys():
+    #     print(col)
+    #     plt.plot(  col, data=df, marker='o', markerfacecolor='blue', markersize=12, color='skyblue', linewidth=4)
+
+    # # multiple line plot
+    # plt.plot( 'x', 'y1', data=df, marker='o', markerfacecolor='blue', markersize=12, color='skyblue', linewidth=4)
+    # plt.plot( 'x', 'y2', data=df, marker='', color='olive', linewidth=2)
+    # plt.plot( 'x', 'y3', data=df, marker='', color='olive', linewidth=2, linestyle='dashed', label="toto")
+
+    plt.legend()
+    plt.ylabel('Accuracy (%)')
+    plt.title('Accuracies throughout training and testing')
+    plt.xticks(np.arange(0,3,1),labels = ["train", "dev", "test"])
+    plt.grid()
+    plt.savefig('test.png')
+    plt.show()
+    # p_same = len(truth_labels)
+    # true_accepts = truth_labels == tested_labels
+    # p_diff = len(tested_labels) - len(true_accepts)
+    # false_accepts= [tested_labels not in true_accepts]
+    # validation_rate = true_accepts/p_same
+    # false_accept_rate =  false_accepts/p_diff
+
+
+
+    # return validation_rate, false_accept_rate
+
+def plot():
     dat_dict = {}
     for file in glob.glob("data/test/test_results/accs/untrained/*.npy"):
         name = (file.split("/")[-1].replace("_", " ")).split(".")[0]
