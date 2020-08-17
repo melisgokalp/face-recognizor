@@ -242,7 +242,7 @@ def save_accuracies(testname, data):
     for name in data:
         onehot[all_names.index(name)] = 1
     file_name = "result_data"
-    result_data = "data/test/test_results/accs/" +  testname + "_retrained_"+file_name + ".npy"
+    result_data = "data/test/test_results/accs/" +  testname + "_unretrained_"+file_name + ".npy"
     data = np.asarray([])
     if os.path.isfile(result_data):
         data = load(result_data)
