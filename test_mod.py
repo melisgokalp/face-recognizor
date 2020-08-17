@@ -222,7 +222,7 @@ def plot_acc(data, mode = "test", note = ""):
     print(onehot)
     save(result_data, data)
 
-def save_accuracies(data, testname):
+def save_accuracies(testname, data):
     # We save names of all the embeddings
     live_embeddings = glob.glob('data/embeddings/live/*.npy')
     all_names = []

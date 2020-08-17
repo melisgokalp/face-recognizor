@@ -134,7 +134,7 @@ def load_model():
     clf = clf.fit(data, labels)
     return clf, num_classes, ds.ix_to_name
 
-def recognize(clf, num_classes, idx_to_name, testing, retrain):
+def recognize(clf, num_classes, idx_to_name, testing, retrain, hide):
     # to store previous confidences to determine whether a face exists
     prev_conf = deque(maxlen=CONF_TO_STORE)
     f_count = 1
@@ -196,7 +196,8 @@ def recognize(clf, num_classes, idx_to_name, testing, retrain):
                         prev_conf.clear()
             else:
                 print("No faces detected.")
-            cv2.imshow('Camera Feed', frame)
+            if not hide:
+                cv2.imshow('Camera Feed', frame)
             if cv2.waitKey(1) & 0xFF == ord('r'):
                 (clf, idx_to_name), inc = add_face(clf, num_classes, retrain)
                 print(idx_to_name)
@@ -239,6 +240,7 @@ if __name__ == "__main__":
     parser.add_argument("--live", action="store_true", help="run with this flag to have a camera demo") 
     parser.add_argument("--retrain", action="store_true", help="run with this flag to retrain for false negatives") 
     parser.add_argument("--plot", action="store_true", help="run with this flag to plot the results") 
+    parser.add_argument("--hide", action="store_true", help="run with this flag to hide windows") 
     parser.add_argument('--note', action='store', type=str, help='The text to parse.')
     parser.add_argument('--clean', action='store_true', help='run with this flag to remove previous embeddings')
 
@@ -282,7 +284,7 @@ if __name__ == "__main__":
             testname = file.split("/")[-2].replace("_", " ")
             print(mode + testname + " for file " + file)
             name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
-            recognize(clf, num_classes, idx_to_name, True, args["retrain"])
+            recognize(clf, num_classes, idx_to_name, True, args["retrain"],  args["hide"])
             clf, num_classes, idx_to_name = load_model()
         print("DONE!! Mode was " + mode)
 
