@@ -281,13 +281,14 @@ def plot_onehots():
         print(dat_dict[k].shape)
         part = dat_dict[k]
         accs = []
+        name = " ".join(k.split(" ")[:2])
+        res[name] = []
         for i in range(0,len(part), 100):
             sum = np.sum(part[i:i+100], axis=0)
             maxd = np.max(sum)
             acc = maxd / np.sum(sum)
             print(maxd)
             print(k)
-            name = " ".join(k.split(" ")[:2])
             print(acc)
             accs.append(acc)
         res[name].append(accs)
@@ -301,10 +302,12 @@ def plot_onehots():
     vals = list(res.values())
     print(keys)
     for i in range(len(keys)):
-        plt.plot(vals[i], label = keys[i], marker='o', markerfacecolor='blue', markersize=5)
-        val = vals[i]
-        for i in range(len(vals)):
-            plt.annotate("{:.2f}".format(val),(i,val), textcoords="offset points", xytext=(0,10), ha='center')
+        print(vals[i][0])
+        val = vals[i][0]
+        plt.plot(val, label = keys[i], marker='o', markerfacecolor='blue', markersize=5)
+        # val = val[i]
+        for v in val:
+            plt.annotate("{:.2f}".format(v),(i,v), textcoords="offset points", xytext=(0,10), ha='center')
     # for col in dat_dict.keys():
     #     print(col)
     #     plt.plot(  col, data=df, marker='o', markerfacecolor='blue', markersize=12, color='skyblue', linewidth=4)
