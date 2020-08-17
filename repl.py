@@ -249,17 +249,18 @@ if __name__ == "__main__":
     print("Using device {}".format(device))
     openFace = load_openface(device) 
 
-    clf, num_classes, idx_to_name = load_model()
-    print(idx_to_name)
-    # cannot function as a classifier if less than 2 classes
-    assert num_classes >= 2
-
     if args["clean"]:
         files = glob.glob('data/embeddings/live/*.npy')
         print(files)
         for f in files[:-1]:
             os.remove(f)
         print(glob.glob('data/embeddings/live/*.npy'))
+
+    clf, num_classes, idx_to_name = load_model()
+    print(idx_to_name)
+    # cannot function as a classifier if less than 2 classes
+    assert num_classes >= 2
+
 
     if args["train"] or  args["test"]:
         files = glob.glob("data/test/test_videos/*/*")
