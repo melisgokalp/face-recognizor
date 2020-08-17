@@ -22,7 +22,7 @@ CONF_TO_STORE = 30
 LIVE_EMBEDDINGS = "data/embeddings/live"
 TRAIN_EMBEDDINGS = "data/embeddings/train"
 
-def capture_faces(seconds=20, sampling_duration=0.1, debug=False):
+def capture_faces(seconds=10, sampling_duration=0.1, debug=False):
     print("Capturing! about to capture {} seconds of video".format(seconds))
     start_time = time.time()
 
@@ -141,7 +141,7 @@ def recognize(clf, num_classes, idx_to_name, testing, retrain, hide):
     else:
         print("Starting video capture...")
         # video_capture = cv2.VideoCapture(0)
-    CONF_THRESHOLD += 0.2/num_classes
+    CONF_THRESHOLD = 0.6 + 0.2/num_classes
     print(CONF_THRESHOLD)
     while True and f_count<= 200:
         # ret is error code but we don't care about it
