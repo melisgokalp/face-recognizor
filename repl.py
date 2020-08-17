@@ -89,14 +89,14 @@ def add_face(clf, num_classes, retrain):
     if not args["train"]:
         name = input("We don't recognize you! Please enter your name:\n").strip().lower()
     increment = 1
-    if retrain:
-        while name in name_to_idx:
-            print("Face exists, append to embeddings!")
-            existing_face = np.load("data/embeddings/live/{}.npy".format(name))
-            with open('myfile.npy', 'ab') as f_handle:
-                np.save(f_handle, Matrix)
-            np.save("data/embeddings/live/{}.npy".format(name), embeddings)
-            return retrain_classifier(clf), 0
+    # if retrain:
+    #     while name in name_to_idx:
+    #         print("Face exists, append to embeddings!")
+    #         existing_face = np.load("data/embeddings/live/{}.npy".format(name))
+    #         with open('myfile.npy', 'ab') as f_handle:
+    #             np.save(f_handle, Matrix)
+    #         np.save("data/embeddings/live/{}.npy".format(name), embeddings)
+    #         return retrain_classifier(clf), 0
     if name == "skip":
         return retrain_classifier(clf), 0
     samples = capture_faces()
@@ -107,7 +107,7 @@ def add_face(clf, num_classes, retrain):
     embeddings = openFace(embeddings)
     embeddings = embeddings.detach().numpy()
 
-    if name in name_to_idx:
+    if name in name_to_idx and retrain:
         print("Face exists, append to embeddings!\n")
         embeddings = update_embedding(LIVE_EMBEDDINGS, embeddings, name)
         increment = 0
