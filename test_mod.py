@@ -230,7 +230,7 @@ def save_accuracies(testname, data):
         name = embedding.split("/")[-1]
         name = name.split(".")[0]
         all_names.append(name)
-    all_names.append("unknown")
+    all_names.append("unknown_class")
     all_names.append("no detection")
     print(all_names)
     onehot = np.zeros((len(all_names),1))
