@@ -249,7 +249,7 @@ def save_accuracies(testname, data):
     # for name in data:
     #     onehot[all_names.index(name)] = 1
     file_name = "result_data"
-    result_data = "data/test/test_results/onehots/" +  testname + "_unretrained_"+file_name + ".npy"
+    result_data = "data/test/test_results/onehots/" +  testname + "_retrained_"+file_name + ".npy"
     data = np.asarray([])
     if os.path.isfile(result_data):
         data = load(result_data)
@@ -260,6 +260,7 @@ def save_accuracies(testname, data):
 
 
 def plot_onehots():
+    dictt ={0: 'bernie_sanders', 1: 'michelle_obama', 2: 'joe_biden', 3: 'andrew_yang', 4: 'malala_yousafzai', 5: 'barack_obama', 6: 'trevor_noah', 7: 'lilly_singh', 8: 'ramy_youssef', 9: 'unknown_class'}
     dat_dict = {}
     for file in glob.glob("data/test/test_results/accs/untrained/*.npy"):
         name = (file.split("/")[-1].replace("_", " ")).split(".")[0]
@@ -274,12 +275,19 @@ def plot_onehots():
     # plt.plot(list(dat_dict.values())[0], label=list(dat_dict.keys()))
     keys = list(dat_dict.keys())
     vals = list(dat_dict.values())
-
+    print(keys)
+    for k in keys:
+        print(dat_dict[k].shape)
+        sum = np.sum(dat_dict[k], axis=0)
+        maxd = np.max(sum)
+        acc = maxd / np.sum(sum)
+        print(maxd)
+        print(acc)
     # df = pd.DataFrame(dat_dict) 
     # file1 = open("data/test/test_results/table_results.txt", "a+")  # append mode
     # file1.write(tabulate(df, headers='keys', tablefmt='psql'))
     # file1.close()
-    print(len(vals[0]))
+
     for i in range(len(keys)):
         plt.plot(vals[i], label = keys[i], marker='o', markerfacecolor='blue', markersize=5)
         val = vals[i]
@@ -332,7 +340,7 @@ def plot():
     # file1 = open("data/test/test_results/table_results.txt", "a+")  # append mode
     # file1.write(tabulate(df, headers='keys', tablefmt='psql'))
     # file1.close()
-    print(len(vals[0]))
+    print(dat_dict[keys[0]])
     for i in range(len(keys)):
         plt.plot(vals[i], label = keys[i], marker='o', markerfacecolor='blue', markersize=5)
         val = vals[i]
@@ -390,5 +398,5 @@ if __name__ == "__main__":
             svm_unknown_classes(args["svm_train"], args["iter"])
         accuracy_metrics("","")
     if args["plot"]:
-        plot()
+        plot_onehots()
         # plot_roc_curve(mode = args["svm_train"], N_ITERS = args["iter"])
