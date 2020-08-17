@@ -283,7 +283,7 @@ if __name__ == "__main__":
         for i in tqdm(range(start, len(files)), total=len(files)):
             file = files[i]
             video_capture = cv2.VideoCapture(file)
-            testname = file.split("/")[-2].replace("_", " ")
+            testname = file.split("/")[-2] #.replace("_", " ")
             print(mode + testname + " for file " + file)
             name_to_idx = {idx_to_name[idx]: idx for idx in idx_to_name}
             recognize(clf, num_classes, idx_to_name, True, args["retrain"],  args["hide"])
