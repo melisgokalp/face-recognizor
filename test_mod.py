@@ -236,10 +236,12 @@ def save_accuracies(testname, data):
     all_names.append("unknown_class")
     # all_names.append("no detection")
     print(all_names)
-    onehot = np.zeros((len(all_names),1))
-    for name in data:
-        onehot[all_names.index(name)] = 1
 
+    res = []
+    for name in data:
+        onehot = np.zeros((len(all_names),1))
+        onehot[all_names.index(name)] = 1
+        res.append(onehot)
     onehot = np.asarray(onehot)
     print(onehot)
     # for name in data:
